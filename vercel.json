@@ -1,0 +1,5 @@
+{
+  "buildCommand": "pnpm build:static",
+  "outputDirectory": "apps/web/out",
+  "framework": "nextjs"
+}
