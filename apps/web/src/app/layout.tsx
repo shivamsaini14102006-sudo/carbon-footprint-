@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Outfit } from 'next/font/google';
+import Link from 'next/link';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -29,8 +30,8 @@ export default function RootLayout({
             </h1>
           </div>
           <div className="flex items-center gap-4">
-            <button className="text-sm font-semibold hover:text-primary transition-colors">Dashboard</button>
-            <button className="text-sm font-semibold hover:text-primary transition-colors">Calculator</button>
+            <Link href="/" className="text-sm font-semibold hover:text-primary transition-colors">Dashboard</Link>
+            <Link href="/calculator" className="text-sm font-semibold hover:text-primary transition-colors">Calculator</Link>
             <div className="w-10 h-10 rounded-full border-2 border-primary/20 flex items-center justify-center overflow-hidden transition-micro">
               <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul" alt="User" />
             </div>
