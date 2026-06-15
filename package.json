@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r run build",
+    "build:static": "pnpm -F web build",
     "lint": "pnpm -r run lint"
   }
 }
