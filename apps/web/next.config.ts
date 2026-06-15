@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
-  trailingSlash: true,
   eslint: {
     // ESLint warnings/errors do not block the production build
     ignoreDuringBuilds: true,

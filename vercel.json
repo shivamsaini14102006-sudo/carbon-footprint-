@@ -1,8 +1,0 @@
-{
-  "framework": "nextjs",
-  "rootDirectory": "apps/web",
-  "buildCommand": "next build",
-  "outputDirectory": "out",
-  "cleanUrls": true,
-  "trailingSlash": true
-}
