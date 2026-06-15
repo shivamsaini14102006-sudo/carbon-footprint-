@@ -1,0 +1,5795 @@
+--- API Contracts v2.pdf ---
+API Contracts
+Project Name
+CarbonWise
+Version: 1.0
+API Style: REST
+Backend Framework: NestJS
+Authentication: JWT
+Validation: Zod
+Status: Approved
+1. Purpose
+This document defines all API contracts for CarbonWise.
+The API layer is responsible for:
+Authentication
+Carbon Calculations
+Recommendations
+Goal Management
+Carbon Twin Simulations
+Analytics
+The design prioritizes:
+Code Quality
+Security
+Efficiency
+Maintainability
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+1
+2. API Standards
+Base URL
+Development
+http://localhost:3001/api/v1
+Production
+https://api.carbonwise.com/api/v1
+Content Type
+Content-Type: application/json
+Request Format
+{
+"data": {}
+}
+Success Response Format
+{
+"success": true,
+"message": "Request successful",
+"data": {}
+}
+2
+Error Response Format
+{
+"success": false,
+"error": {
+"code": "VALIDATION_ERROR",
+"message": "Invalid request"
+}
+}
+3. Authentication
+All protected routes require:
+Authorization: Bearer <access_token>
+Token Strategy
+Access Token
+15 Minutes
+Refresh Token
+30 Days
+4. Authentication APIs
+3
+Register User
+Endpoint
+POST /auth/register
+Request
+{
+"fullName": "Rahul Sharma",
+"email": "rahul@example.com",
+"password": "StrongPassword123"
+}
+Validation Rules
+Name Required
+Valid Email
+Password Minimum 8 Characters
+Response
+{
+"success": true,
+"message": "User registered successfully"
+}
+4
+Login User
+Endpoint
+POST /auth/login
+Request
+{
+"email": "rahul@example.com",
+"password": "StrongPassword123"
+}
+Response
+{
+"success": true,
+"data": {
+"accessToken": "...",
+"refreshToken": "..."
+}
+}
+Refresh Token
+Endpoint
+POST /auth/refresh
+5
+Request
+{
+"refreshToken": "..."
+}
+Response
+{
+"accessToken": "..."
+}
+Logout
+Endpoint
+POST /auth/logout
+Response
+{
+"success": true
+}
+5. User APIs
+6
+Get Profile
+Endpoint
+GET /users/profile
+Response
+{
+"id": "uuid",
+"fullName": "Rahul Sharma",
+"email": "rahul@example.com"
+}
+Update Profile
+Endpoint
+PATCH /users/profile
+Request
+{
+"fullName": "Rahul Sharma",
+"dietType": "Vegetarian"
+}
+Response
+{
+"success": true
+}
+7
+6. Carbon Calculator APIs
+These APIs directly support:
+Understand
+from the challenge statement.
+Calculate Carbon Footprint
+Endpoint
+POST /carbon/calculate
+Request
+{
+"transportation": {
+"carKm": 120,
+"busKm": 20
+},
+"food": {
+"meatMeals": 5
+},
+"energy": {
+"electricityKwh": 250
+},
+"shopping": {
+"clothingItems": 3
+}
+}
+8
+Response
+{
+"success": true,
+"data": {
+"carbonScore": 68,
+"totalEmission": 154.6,
+"unit": "kgCO2e"
+}
+}
+Save Activity
+Endpoint
+POST /activities
+Request
+{
+"category": "TRANSPORTATION",
+"activityName": "Car Travel",
+"quantity": 120,
+"unit": "km"
+}
+Response
+{
+"success": true,
+"activityId": "uuid"
+}
+9
+Get Activities
+Endpoint
+GET /activities?page=1&limit=20
+Response
+{
+"page": 1,
+"limit": 20,
+"total": 120,
+"data": []
+}
+7. Dashboard APIs
+These APIs directly support:
+Track
+Dashboard Summary
+Endpoint
+GET /dashboard
+Response
+{
+"carbonScore": 68,
+"monthlyEmission": 180,
+10
+"activeGoals": 2,
+"recommendations": 4
+}
+Dashboard Analytics
+Endpoint
+GET /dashboard/analytics
+Response
+{
+"monthlyTrend": [],
+"categoryBreakdown": []
+}
+8. Recommendation APIs
+These APIs directly support:
+Reduce
+Generate Recommendations
+Endpoint
+POST /recommendations/generate
+11
+Response
+{
+"success": true,
+"data": [
+{
+"title": "Use Public Transport",
+"priority": "HIGH",
+"estimatedSavings": 120
+}
+]
+}
+Get Recommendations
+Endpoint
+GET /recommendations
+Query
+?page=1&limit=10
+Response
+{
+"data": []
+}
+12
+Accept Recommendation
+Endpoint
+POST /recommendations/:id/accept
+Response
+{
+"success": true
+}
+Complete Recommendation
+Endpoint
+POST /recommendations/:id/complete
+Response
+{
+"success": true
+}
+9. Goal APIs
+13
+Create Goal
+Endpoint
+POST /goals
+Request
+{
+"title": "Reduce Transportation Emissions",
+"targetReduction": 20,
+"targetDate": "2027-01-01"
+}
+Response
+{
+"goalId": "uuid"
+}
+Get Goals
+Endpoint
+GET /goals
+Response
+{
+"data": []
+}
+14
+Update Goal
+Endpoint
+PATCH /goals/:goalId
+Response
+{
+"success": true
+}
+Delete Goal
+Endpoint
+DELETE /goals/:goalId
+Response
+{
+"success": true
+}
+10. Carbon Twin APIs
+This is the platform's differentiating feature.
+15
+Create Simulation
+Endpoint
+POST /carbon-twin/simulate
+Request
+{
+"scenario": {
+"transportation": "public_transport",
+"meatReduction": 3
+}
+}
+Response
+{
+"currentEmission": 250,
+"projectedEmission": 180,
+"potentialSavings": 70
+}
+Get Previous Simulations
+Endpoint
+GET /carbon-twin/history
+16
+Response
+{
+"data": []
+}
+11. Notifications API
+Get Notifications
+Endpoint
+GET /notifications
+Mark Read
+Endpoint
+PATCH /notifications/:id/read
+12. Validation Standards
+All requests validated using:
+Zod
+17
+Example Schema
+constCreateGoalSchema= z.object({
+title: z.string().min(3),
+targetReduction: z.number().positive()
+});
+13. Security Controls
+Supports:
+Security (Medium Impact)
+Helmet
+Enabled globally.
+Rate Limiting
+100 Requests / Minute
+per user .
+Input Validation
+All endpoints validated.
+JWT Authentication
+Protected routes require authentication.
+18
+Password Security
+bcrypt
+used for hashing.
+CORS
+Restricted origins only.
+14. Efficiency Standards
+Supports:
+Efficiency (Medium Impact)
+Pagination
+Mandatory on:
+Activities
+Recommendations
+Notifications
+Redis Caching
+Applied to:
+Dashboard
+Analytics
+Recommendations
+• 
+• 
+• 
+• 
+• 
+• 
+19
+Query Optimization
+Use:
+Indexed Queries
+Avoid:
+SELECT *
+15. Error Codes
+Code Meaning
+VALIDATION_ERRORInvalid Request
+UNAUTHORIZED Authentication Failed
+FORBIDDEN Access Denied
+NOT_FOUND Resource Missing
+RATE_LIMITED Too Many Requests
+INTERNAL_ERRORServer Error
+16. API Testing Strategy
+Supports:
+Testing (Low Impact)
+Unit Testing
+Tool:
+20
+Jest
+Integration Testing
+Tool:
+Supertest
+E2E Testing
+Tool:
+Playwright
+Critical Flows
+Must be tested:
+Register
+Login
+Carbon Calculation
+Recommendations
+Goals
+Carbon Twin
+17. Success Criteria
+The API layer is successful when:
+21
+✅ Authentication is secure
+✅ Carbon calculations are accurate
+✅ Recommendations are personalized
+✅ Carbon Twin simulations work reliably
+✅ APIs remain performant
+✅ Validation prevents malformed requests
+✅ Test coverage goals are achieved
+✅ The API fully supports:
+Understand
+Track
+Reduce
+requirements of the challenge.
+• 
+• 
+• 
+22
+
+
+--- Database Schema for CarbonWise.pdf ---
+Database Schema
+Project Name
+CarbonWise
+Version: 1.0
+Database: PostgreSQL 16
+ORM: Prisma ORM
+Status: Approved
+1. Purpose
+This document defines the database architecture for CarbonWise.
+The database is designed to support the three core objectives of the challenge:
+Understand
+↓
+Track
+↓
+Reduce
+The schema prioritizes:
+Data Integrity
+Scalability
+Query Performance
+Security
+Maintainability
+• 
+• 
+• 
+• 
+• 
+1
+2. Database Architecture Overview
+Users
+│
+├── UserPreferences
+│
+├── Activities
+│
+├── CarbonRecords
+│
+├── Recommendations
+│
+├── RecommendationActions
+│
+├── Goals
+│
+├── GoalMilestones
+│
+├── CarbonTwinScenarios
+│
+└── Notifications
+3. Entity Relationship Overview
+User
+ │
+ ├── Activities
+ │
+ ├── CarbonRecords
+ │
+ ├── Recommendations
+ │
+ ├── Goals
+ │
+ ├── CarbonTwinScenarios
+ │
+ └── Notifications
+2
+4. Users Table
+Purpose
+Stores user account information.
+Prisma Model
+model User {
+  id              String   @id @default(uuid())
+  fullName        String
+  email           String   @unique
+  passwordHash    String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  preferences     UserPreference?
+  activities      Activity[]
+  carbonRecords   CarbonRecord[]
+  recommendations Recommendation[]
+  goals           Goal[]
+}
+Fields
+Field Type Description
+id UUID Primary Key
+fullName String User Name
+email String Unique Email
+passwordHashString bcrypt Hash
+createdAt DateTimeCreation Date
+updatedAt DateTimeLast Update
+3
+5. User Preferences Table
+Purpose
+Stores personalization settings.
+Prisma Model
+model UserPreference {
+  id                      String @id @default(uuid())
+  userId                  String @unique
+  dietType                String
+  transportationType      String
+  sustainabilityGoal      String
+  user                    User @relation(fields:[userId], references:[id])
+}
+Examples
+Vegetarian
+Public Transport
+Reduce 20%
+6. Activities Table
+Purpose
+Stores all user activities contributing to emissions.
+4
+Prisma Model
+model Activity {
+  id             String   @id @default(uuid())
+  userId         String
+  category       ActivityCategory
+  activityName   String
+  quantity       Float
+  unit           String
+  activityDate   DateTime
+  createdAt      DateTime @default(now())
+  user           User @relation(fields:[userId], references:[id])
+}
+Activity Categories
+enum ActivityCategory {
+  TRANSPORTATION
+  FOOD
+  ENERGY
+  SHOPPING
+}
+Examples
+Transportation:
+Car Travel
+Flight
+5
+Bus
+Bike
+Food:
+Meat Meal
+Vegetarian Meal
+Dairy Consumption
+Energy:
+Electricity
+Heating
+Cooling
+Shopping:
+Clothing
+Electronics
+Household Goods
+7. Carbon Records Table
+Purpose
+Stores calculated emissions.
+Prisma Model
+model CarbonRecord {
+  id              String   @id @default(uuid())
+  userId          String
+6
+  activityId      String?
+  category        ActivityCategory
+  emissionValue   Float
+  emissionUnit    String
+  createdAt       DateTime @default(now())
+  user            User @relation(fields:[userId], references:[id])
+}
+Example
+Transportation
+45 kg CO₂e
+8. Recommendations Table
+Purpose
+Stores personalized recommendations generated by the Recommendation Engine.
+Prisma Model
+model Recommendation {
+  id                 String @id @default(uuid())
+  userId             String
+  title              String
+  description        String
+  priority           RecommendationPriority
+7
+  estimatedSavings   Float
+  accepted           Boolean @default(false)
+  createdAt          DateTime @default(now())
+  user               User @relation(fields:[userId], references:[id])
+}
+Priority Enum
+enum RecommendationPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+Example
+Use Public Transport Twice Weekly
+Estimated Savings:
+120 kg CO₂/year
+9. Recommendation Actions Table
+Purpose
+Tracks whether recommendations were followed.
+Prisma Model
+model RecommendationAction {
+  id                 String @id @default(uuid())
+8
+  recommendationId   String
+  actionTaken        Boolean
+  completedAt        DateTime?
+}
+Why This Exists
+Supports:
+Track
+and
+Reduce
+portions of the challenge.
+10. Goals Table
+Purpose
+Stores sustainability goals.
+Prisma Model
+model Goal {
+  id                  String @id @default(uuid())
+  userId              String
+  title               String
+  targetReduction     Float
+  currentProgress     Float
+9
+  targetDate          DateTime
+  status              GoalStatus
+  createdAt           DateTime @default(now())
+  user                User @relation(fields:[userId], references:[id])
+}
+Goal Status
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+}
+Example
+Reduce Transportation Emissions
+Target:
+20%
+11. Goal Milestones Table
+Purpose
+Tracks progress.
+Prisma Model
+model GoalMilestone {
+  id                 String @id @default(uuid())
+10
+  goalId             String
+  title              String
+  targetPercentage   Int
+  completed          Boolean
+}
+Example
+25%
+50%
+75%
+100%
+12. Carbon Twin Scenario Table
+Purpose
+Stores simulation results.
+Prisma Model
+model CarbonTwinScenario {
+  id                    String @id @default(uuid())
+  userId                String
+  scenarioName          String
+  currentEmission       Float
+  projectedEmission     Float
+11
+  potentialSavings      Float
+  createdAt             DateTime @default(now())
+}
+Example
+Current:
+250 kg CO₂
+Projected:
+180 kg CO₂
+Savings:
+70 kg CO₂
+Why Important
+This table powers:
+Personalized Insights
+which is a key challenge requirement.
+13. Notifications Table
+Purpose
+Stores reminders and alerts.
+12
+Prisma Model
+model Notification {
+  id             String @id @default(uuid())
+  userId         String
+  title          String
+  message        String
+  isRead         Boolean @default(false)
+  createdAt      DateTime @default(now())
+}
+Examples
+Goal Milestone Reached
+New Recommendation Available
+Weekly Carbon Report
+14. Emission Factors Table
+Purpose
+Stores official emission factors.
+Prisma Model
+model EmissionFactor {
+  id              String @id @default(uuid())
+  category        String
+13
+  itemName        String
+  factor          Float
+  unit            String
+  source          String
+}
+Example
+Car Travel
+0.192 kg CO₂/km
+15. Indexing Strategy
+High Priority Indexes
+Users
+CREATEUNIQUEINDEXidx_users_email
+ONusers(email);
+Activities
+CREATEINDEXidx_activities_user
+ONactivities(user_id);
+Carbon Records
+CREATEINDEXidx_carbon_records_user
+ONcarbon_records(user_id);
+14
+Recommendations
+CREATEINDEXidx_recommendations_user
+ONrecommendations(user_id);
+Why
+Supports:
+Efficiency (Medium Impact)
+evaluation criteria.
+16. Query Optimization Strategy
+Pagination
+Applied to:
+Activities
+Recommendations
+Notifications
+Example:
+LIMIT20
+OFFSET0
+Selective Queries
+Avoid:
+SELECT*
+• 
+• 
+• 
+15
+Use:
+SELECTid, title
+17. Security Considerations
+Supports:
+Security (Medium Impact)
+Password Storage
+Never store:
+Plain Text Passwords
+Store:
+bcrypt Hashes
+SQL Injection Protection
+Provided by:
+Prisma ORM
+Sensitive Data
+Never store:
+Access Tokens• 
+16
+API Keys
+Secrets
+inside database records.
+18. Backup Strategy
+Daily
+Incremental Backup
+Weekly
+Full Backup
+Monthly
+Archive Backup
+19. Scalability Strategy
+Future tables may support:
+Community Challenges
+AI Carbon Coach
+Sustainability Reports
+Smart Device Data
+without major schema redesign.
+20. Requirement Traceability
+Understand
+Supported By:
+Activities
+Carbon Records
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+17
+Track
+Supported By:
+Goals
+Milestones
+Notifications
+Reduce
+Supported By:
+Recommendations
+Recommendation Actions
+Carbon Twin Scenarios
+21. Success Criteria
+The database design is successful when:
+✅ User data remains secure
+✅ Carbon calculations are traceable
+✅ Recommendations are auditable
+✅ Queries remain performant
+✅ Goal tracking works reliably
+✅ Carbon Twin simulations are stored efficiently
+✅ Future features can be added without major schema changes
+• 
+• 
+• 
+• 
+• 
+• 
+18
+
+
+--- Development Phase Plan.pdf ---
+Development Phase Plan
+Project Name
+CarbonWise
+Version: 1.0
+Status: Approved
+Methodology: Agile + Iterative Development
+Duration: 8 Weeks
+1. Purpose
+This document defines the complete development roadmap for CarbonWise.
+The goal is to ensure development remains focused on the challenge statement:
+Design a solution that helps individuals understand, track, and reduce their carbon footprint
+through simple actions and personalized insights.
+while maximizing performance in:
+Code Quality (High Impact)
+Problem Statement Alignment (High Impact)
+Security (Medium Impact)
+Efficiency (Medium Impact)
+Testing (Low Impact)
+Accessibility (Low Impact)
+2. Development Philosophy
+CarbonWise will not be developed as a simple carbon calculator .
+Instead, development focuses on:
+• 
+• 
+• 
+• 
+• 
+• 
+1
+Understand
+↓
+Track
+↓
+Reduce
+↓
+Behavior Change
+This flow guides every engineering decision.
+3. Development Methodology
+Framework
+Agile Scrum
+Sprint Duration
+1 Week
+Total Sprints
+8 Sprints
+Workflow
+Planning
+2
+↓
+Development
+↓
+Testing
+↓
+Review
+↓
+Deployment
+4. Phase 0 — Research and Planning
+Objectives
+Understand:
+Problem Statement
+User Personas
+Sustainability Challenges
+Carbon Tracking Methods
+Deliverables
+Product
+PRD
+User Personas
+User Stories
+Architecture
+System Architecture
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+3
+Database Design
+API Contracts
+Development Setup
+Git Repository
+Monorepo Structure
+CI/CD Pipeline
+Success Criteria
+✅ Requirements Finalized
+✅ Architecture Approved
+✅ Development Environment Ready
+5. Phase 1 — Core Foundation
+Objectives
+Build the platform foundation.
+Features
+Authentication
+Registration
+Login
+JWT Authentication
+Password Reset
+User Profile
+Personal Information
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+4
+Sustainability Preferences
+Initial Dashboard
+Basic Layout
+User Overview
+Engineering Deliverables
+Frontend:
+Next.js Setup
+Tailwind Setup
+Shadcn Setup
+Backend:
+NestJS Setup
+Prisma Setup
+PostgreSQL Setup
+Security:
+Helmet
+bcrypt
+JWT
+Rate Limiting
+• 
+• 
+• 
+5
+Success Criteria
+✅ Users Can Register
+✅ Users Can Login
+✅ Security Layer Implemented
+6. Phase 2 — Carbon Intelligence Engine
+Objectives
+Implement carbon footprint understanding.
+Features
+Carbon Calculator
+Categories:
+Transportation
+Food
+Energy
+Shopping
+Carbon Score Engine
+Features:
+Score Calculation
+Sustainability Rating
+• 
+• 
+6
+Activity Logging
+Features:
+Add Activities
+Store Activities
+Retrieve Activities
+Deliverables
+Backend:
+Carbon Engine
+Emission Factors
+Calculation Services
+Frontend:
+Calculator UI
+Results Dashboard
+Success Criteria
+✅ Carbon Calculations Accurate
+✅ Carbon Score Generated
+✅ Users Understand Emissions
+7. Phase 3 — Tracking Engine
+• 
+• 
+• 
+7
+Objectives
+Enable users to track sustainability progress.
+Features
+Dashboard Analytics
+Displays:
+Monthly Trends
+Emission Breakdown
+Carbon History
+Activity History
+Features:
+Search
+Filtering
+Pagination
+Reports
+Features:
+Weekly Summary
+Monthly Summary
+Deliverables
+Analytics Engine
+Dashboard Components
+History Module
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+8
+Success Criteria
+✅ Users Can Track Progress
+✅ Trends Display Correctly
+✅ Dashboard Loads Under 2 Seconds
+8. Phase 4 — Recommendation Engine
+Objectives
+Enable personalized carbon reduction.
+Features
+Hotspot Detection
+Identify:
+Highest Emission Category
+Recommendation Ranking
+Based On:
+Impact
+Feasibility
+User Preferences
+9
+Personalized Insights
+Examples:
+Transportation Heavy User:
+Use Public Transport
+Food Heavy User:
+Reduce Meat Consumption
+Deliverables
+Recommendation Service
+Insight Engine
+Priority Engine
+Success Criteria
+✅ Recommendations Personalized
+✅ Hotspots Identified Correctly
+✅ Users Receive Actionable Advice
+9. Phase 5 — Goal Tracking System
+Objectives
+Create measurable sustainability improvement.
+10
+Features
+Goal Creation
+Users Can:
+Create Goals
+Edit Goals
+Delete Goals
+Progress Tracking
+Displays:
+Completion Percentage
+Milestones
+Target Reduction
+Goal Analytics
+Displays:
+Goal Success Rate
+Progress History
+Deliverables
+Goal Engine
+Milestone System
+Progress Calculator
+Success Criteria
+✅ Goals Created Successfully
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+11
+✅ Progress Calculated Correctly
+✅ Milestones Trigger Properly
+10. Phase 6 — Carbon Twin Engine
+Objectives
+Deliver predictive sustainability insights.
+Why Important
+This feature provides the strongest differentiation from traditional carbon calculators.
+Features
+Scenario Builder
+Examples:
+Reduce Car Usage
+Use Public Transport
+Reduce Meat Consumption
+Lower Electricity Usage
+Emission Forecasting
+Displays:
+Current Emissions
+12
+↓
+Projected Emissions
+↓
+Potential Savings
+Impact Visualization
+Displays:
+Predicted Carbon Score
+Future Reduction
+Sustainability Forecast
+Deliverables
+Carbon Twin Engine
+Simulation Logic
+Forecast Dashboard
+Success Criteria
+✅ Scenarios Simulated Correctly
+✅ Forecasts Generated
+✅ Personalized Insights Improved
+11. Phase 7 — Testing and Quality Assurance
+• 
+• 
+• 
+13
+Objectives
+Prepare for production release.
+Testing Scope
+Unit Tests
+Technology:
+Jest
+Coverage Target:
+90%+
+Integration Tests
+Technology:
+Supertest
+Coverage Target:
+80%+
+End-to-End Tests
+Technology:
+Playwright
+14
+Critical Flows:
+Registration
+Login
+Carbon Calculator
+Recommendations
+Goals
+Carbon Twin
+Accessibility Testing
+Tools:
+Playwright
+axe-core
+Security Testing
+Verify:
+JWT Security
+Helmet Headers
+Input Validation
+Rate Limiting
+Authorization
+Performance Testing
+Targets:
+API < 500ms
+Calculator < 100ms
+Dashboard < 2s
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+15
+Success Criteria
+✅ All Tests Pass
+✅ No Critical Bugs
+✅ Security Requirements Met
+✅ Accessibility Requirements Met
+12. CI/CD Integration Timeline
+Implemented From:
+Sprint 1
+Pipeline:
+Git Push
+↓
+ESLint
+↓
+Type Check
+↓
+Jest
+↓
+Supertest
+↓
+Build
+16
+↓
+Playwright
+↓
+Deploy
+13. Security Roadmap
+Implemented Throughout Development.
+Sprint 1
+Authentication Security
+Sprint 2
+Input Validation
+Sprint 3
+Rate Limiting
+Sprint 4
+Authorization Review
+Sprint 5
+Security Testing
+Sprint 6
+Dependency Audit
+17
+14. Accessibility Roadmap
+Implemented Throughout Development.
+Navigation
+Keyboard Accessible
+Forms
+Accessible Labels
+Charts
+Screen Reader Support
+Color System
+WCAG 2.2 AA Compliance
+15. Performance Roadmap
+Implemented Throughout Development.
+Database
+Indexes
+Pagination
+Backend
+Caching
+18
+Optimized Queries
+Frontend
+Lazy Loading
+Code Splitting
+Image Optimization
+16. Release Readiness Checklist
+Before Release:
+✅ Code Review Complete
+✅ ESLint Passes
+✅ Type Checking Passes
+✅ Jest Passes
+✅ Supertest Passes
+✅ Playwright Passes
+✅ Security Review Complete
+✅ Accessibility Review Complete
+✅ Performance Targets Met
+17. Risk Management
+Risk 1
+Incorrect Carbon Calculations
+19
+Mitigation:
+Verified Emission Factors
+Unit Testing
+Risk 2
+Poor Recommendation Quality
+Mitigation:
+Hotspot Analysis
+Recommendation Ranking
+Risk 3
+Performance Bottlenecks
+Mitigation:
+Redis
+Pagination
+Indexes
+Risk 4
+Security Vulnerabilities
+Mitigation:
+Helmet
+JWT
+bcrypt
+Validation
+18. Final Success Criteria
+The development roadmap is successful when:
+✅ Users Understand Their Carbon Footprint
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+20
+✅ Users Track Sustainability Progress
+✅ Users Receive Personalized Insights
+✅ Users Reduce Emissions Through Actions
+✅ Code Quality Remains High
+✅ Security Best Practices Are Followed
+✅ Performance Targets Are Met
+✅ Accessibility Requirements Are Satisfied
+✅ The Platform Fully Solves The Challenge Statement
+21
+
+
+--- DevOps Strategy for CarbonWise.pdf ---
+Environment and DevOps
+Project Name
+CarbonWise
+Version: 1.0
+Status: Approved
+Deployment Strategy: Containerized
+CI/CD Platform: GitHub Actions
+1. Purpose
+This document defines the deployment, infrastructure, CI/CD, monitoring, security, and operational strategy
+for CarbonWise.
+The architecture is designed to maximize:
+Code Quality (High Impact)
+Security (Medium Impact)
+Efficiency (Medium Impact)
+Testing Reliability
+Maintainability
+while keeping the repository:
+```text id="2xkn6t" Single Branch
+Public Repository
+Under 10 MB 
+as required by the challenge.
+---
+# 2. DevOps Objectives
+The system must:
+• 
+• 
+• 
+• 
+• 
+1
+- Deploy consistently
+- Support automated testing
+- Enable rapid iteration
+- Maintain security standards
+- Provide operational visibility
+---
+# 3. Environment Strategy
+Three environments will be maintained.
+---
+## Development
+Purpose:
+```text id="n1gmx8"
+Local Development
+Used For:
+Feature Development
+Unit Testing
+Debugging
+Staging
+Purpose:
+```text id="evq3o0" Pre-Production Validation 
+Used For:
+- Integration Testing
+- Playwright Testing
+- Security Verification
+---
+## Production
+• 
+• 
+• 
+2
+Purpose:
+```text id="7o3t2z"
+Live User Environment
+Used For:
+Real User Traffic
+Monitoring
+Analytics
+4. Technology Stack
+Frontend
+```text id="61l5fk" Next.js 15
+TypeScript
+Tailwind CSS
+Shadcn/UI 
+---
+## Backend
+```text id="c1r5cz"
+NestJS
+TypeScript
+Database
+```text id="8vqekv" PostgreSQL 
+---
+## ORM
+• 
+• 
+• 
+3
+```text id="sp7z3e"
+Prisma
+Cache
+```text id="gjm44y" Redis 
+---
+# 5. Infrastructure Overview
+```text id="h84z0i"
+User
+↓
+Next.js Frontend
+↓
+NestJS API
+↓
+Redis Cache
+↓
+PostgreSQL
+6. Local Development Environment
+Developers run the system using:
+```text id="v1q8qj" Docker Compose 
+---
+## Local Services
+4
+```text id="vlnuq0"
+Frontend
+Backend
+PostgreSQL
+Redis
+Docker Compose Structure
+```yaml id="m14sza" services: frontend: backend: postgres: redis: 
+---
+# Benefits
+- Consistent Setup
+- Easy Onboarding
+- Reduced Environment Issues
+---
+# 7. Containerization Strategy
+Each major service runs inside Docker.
+---
+## Frontend Container
+Responsibilities:
+- UI Rendering
+- Static Assets
+---
+## Backend Container
+Responsibilities:
+- APIs
+- Authentication
+5
+- Business Logic
+---
+## Database Container
+Responsibilities:
+- Persistent Storage
+---
+## Redis Container
+Responsibilities:
+- Caching
+- Session Data
+---
+# Example Backend Dockerfile
+```dockerfile id="1b4xzw"
+FROM node:22-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+CMD ["node","dist/main.js"]
+8. Git Strategy
+Challenge requirement:
+```text id="5ydyho" Single Branch Only 
+6
+---
+## Branch
+```text id="mp90wy"
+main
+Workflow
+```text id="z5m0qf" Code
+↓
+Commit
+↓
+Push
+↓
+GitHub Actions
+↓
+Deploy 
+---
+# 9. CI/CD Pipeline
+Platform:
+```text id="uowu5l"
+GitHub Actions
+Pipeline Overview
+```text id="jsbgr8" Push
+7
+↓
+ESLint
+↓
+Type Check
+↓
+Jest
+↓
+Supertest
+↓
+Build
+↓
+Playwright
+↓
+Deploy 
+---
+# 10. Code Quality Automation
+Supports:
+```text id="rqxfql"
+Code Quality (High Impact)
+ESLint
+Purpose:
+Enforce Consistency
+Prevent Common Mistakes
+• 
+• 
+8
+Prettier
+Purpose:
+Consistent Formatting
+TypeScript
+Purpose:
+Static Type Safety
+Pipeline Rules
+Build fails if:
+```text id="afn8dr" Lint Errors Exist
+Type Errors Exist
+Tests Fail 
+---
+# 11. Testing Automation
+Supports:
+```text id="9eyx7r"
+Testing
+Unit Tests
+```text id="r8t0wg" Jest 
+---
+## Integration Tests
+• 
+• 
+9
+```text id="4eqn0j"
+Supertest
+E2E Tests
+```text id="3cqlg4" Playwright 
+---
+# Trigger
+Every Pull Request:
+```text id="4pt2e0"
+Run Full Test Suite
+12. Security Pipeline
+Supports:
+```text id="f8ylz9" Security (Medium Impact) 
+---
+# Dependency Scanning
+Tool:
+```text id="4crzj9"
+npm audit
+Secret Scanning
+Prevent:
+```text id="pwk20o" API Keys
+10
+Passwords
+Tokens 
+from being committed.
+---
+# Security Headers
+Implemented Using:
+```text id="0jlj6w"
+Helmet
+Helmet Configuration
+Provides:
+```text id="7u53ow" Content Security Policy
+X-Frame-Options
+X-Content-Type-Options 
+---
+# Rate Limiting
+Protect APIs:
+```text id="8h7o5w"
+100 Requests / Minute
+Password Security
+Technology:
+```text id="fdt4oq" bcrypt 
+11
+---
+# JWT Security
+Includes:
+```text id="lp3x7v"
+Access Token
+Refresh Token
+Environment Variables
+Stored In:
+```text id="1x4b8f" .env 
+---
+Never Commit:
+```text id="ehht40"
+Secrets
+Passwords
+API Keys
+13. Database Operations
+Migration Strategy
+Tool:
+```text id="g2r91q" Prisma Migrate 
+---
+# Workflow
+12
+```text id="pk4th7"
+Schema Change
+↓
+Migration
+↓
+Review
+↓
+Deploy
+Backup Strategy
+Daily
+Incremental Backup
+Weekly
+Full Backup
+Monthly
+Archive Backup
+14. Caching Strategy
+Supports:
+```text id="2t7c6l" Efficiency (Medium Impact) 
+---
+13
+## Technology
+```text id="wazkg6"
+Redis
+Cached Resources
+Dashboard
+Recommendations
+Analytics
+Carbon Twin Results
+Benefits
+```text id="1g7xiw" Reduced Database Load
+Faster Responses
+Lower Latency 
+---
+# 15. Monitoring Strategy
+Purpose:
+Maintain system health.
+---
+# Metrics Tracked
+### API Response Time
+14
+Target:
+```text id="1v64yu"
+<500 ms
+Dashboard Load Time
+Target:
+```text id="qp7r89" <2 seconds 
+---
+### Error Rate
+Target:
+```text id="qzd21s"
+<1%
+Uptime
+Target:
+```text id="ujk2yc" 99.9% 
+---
+# 16. Logging Strategy
+All major events are logged.
+---
+# Authentication Events
+Examples:
+```text id="7y3cqj"
+Login
+Logout
+15
+Failed Login
+Business Events
+Examples:
+```text id="f5lkg9" Goal Creation
+Recommendation Acceptance
+Carbon Calculation 
+---
+# Error Events
+Examples:
+```text id="eprsv6"
+Database Errors
+Validation Failures
+Unhandled Exceptions
+17. Performance Optimization
+Supports:
+```text id="71nq34" Efficiency (Medium Impact) 
+---
+# Database Indexes
+Indexes:
+```text id="ut5xjt"
+email
+16
+user_id
+created_at
+Pagination
+Applied To:
+```text id="5n1yxm" Activities
+Recommendations
+Notifications 
+---
+# Lazy Loading
+Applied To:
+```text id="a0v4pa"
+Charts
+Analytics
+Historical Data
+Query Optimization
+Avoid:
+```sql id="p6z3ci" SELECT * 
+---
+Prefer:
+17
+```sql id="s7jdh5"
+SELECT id, title
+18. Accessibility Validation
+Supports:
+```text id="8c7m34" Accessibility (Low Impact) 
+---
+# Automated Checks
+Tools:
+```text id="mz2x0f"
+Playwright
+axe-core
+Manual Validation
+Verify:
+Keyboard Navigation
+Screen Readers
+Focus Indicators
+19. Deployment Strategy
+Development
+Automatic Deployment
+Staging
+Approval Required
+• 
+• 
+• 
+18
+Production
+Manual Approval Required
+Release Workflow
+```text id="6h2r9w" Build
+↓
+Tests
+↓
+Security Checks
+↓
+Deployment
+↓
+Monitoring 
+---
+# 20. Disaster Recovery
+Recovery Goals:
+---
+## RTO
+```text id="eqk8e4"
+1 Hour
+19
+RPO
+text id="wtz7h6"
+15 Minutes
+21. Operational Checklist
+Before Every Release:
+✅ Lint Passes
+✅ Type Check Passes
+✅ Jest Passes
+✅ Supertest Passes
+✅ Playwright Passes
+✅ Security Scan Passes
+✅ Database Migration Reviewed
+✅ No Critical Bugs Open
+22. Future Infrastructure Expansion
+Supports:
+AI Carbon Coach
+Community Challenges
+Smart Device Integration
+Enterprise Sustainability Programs
+without architectural redesign.
+23. Success Criteria
+The DevOps strategy is successful when:
+• 
+• 
+• 
+• 
+20
+✅ Deployments are repeatable
+✅ Tests run automatically
+✅ Security controls are enforced
+✅ Performance targets are met
+✅ Accessibility checks are included
+✅ Production incidents are minimized
+✅ Development remains efficient
+✅ The platform remains maintainable as it grows
+21
+
+
+--- Engineering Scope Definition.pdf ---
+Engineering Scope Definition
+Project Name
+CarbonWise
+Version: 1.0
+Status: Approved for Development
+1. Purpose
+This document defines the engineering boundaries, implementation scope, technical responsibilities, and
+system constraints for CarbonWise.
+The objective is to ensure:
+Clear development direction
+Maintainable architecture
+High code quality
+Secure implementation
+Efficient system performance
+Alignment with challenge requirements
+2. Engineering Goals
+Primary Goals
+Build a system that helps users:
+Understand their carbon footprint
+Track emissions over time
+Receive personalized sustainability insights
+Reduce emissions through actionable recommendations
+Technical Goals
+Maintain clean architecture
+Ensure scalability
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+1
+Support future feature expansion
+Achieve high testability
+Maximize maintainability
+3. Technology Stack
+Frontend
+Framework
+Next.js 15
+Language
+TypeScript
+Styling
+Tailwind CSS
+Component System
+Shadcn/UI
+State Management
+TanStack Query
+• 
+• 
+• 
+2
+Backend
+Framework
+NestJS
+Reason:
+Strong architecture
+Dependency Injection
+Testability
+Enterprise-grade structure
+Language
+TypeScript
+Database
+Primary Database
+PostgreSQL
+ORM
+Prisma ORM
+Benefits:
+Type Safety
+Schema Management
+Migration Support
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+3
+Cache Layer
+Technology
+Redis
+Used for:
+Dashboard Caching
+Session Management
+Recommendation Caching
+Authentication
+Method
+JWT Authentication
+Password Security
+bcrypt
+Testing
+Unit Testing
+Jest
+Integration Testing
+Supertest
+• 
+• 
+• 
+4
+End-to-End Testing
+Playwright
+4. Project Scope
+Included Features
+User Authentication
+Capabilities:
+Registration
+Login
+Logout
+Password Reset
+Session Management
+Carbon Calculator
+Categories:
+Transportation
+Car
+Bus
+Train
+Flight
+Bike
+Food
+Meat
+Dairy
+Vegetarian
+Vegan
+Energy
+Electricity
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+5
+Heating
+Cooling
+Shopping
+Clothing
+Electronics
+Household Goods
+Dashboard
+Features:
+Carbon Score
+Emission Trends
+Category Breakdown
+Sustainability Rating
+Recommendation Engine
+Features:
+Personalized Recommendations
+Priority Ranking
+Impact Estimation
+Action Plans
+Goal Tracking
+Features:
+Create Goals
+Track Progress
+Milestones
+Goal Completion
+Carbon Twin
+Features:
+What-if Simulations
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+6
+Future Emission Forecasts
+Sustainability Planning
+5. Excluded Scope
+The following features are intentionally excluded.
+Carbon Credit Trading
+Reason:
+Outside challenge requirements.
+Government Integrations
+Reason:
+Requires external dependencies.
+Smart Home Device Integration
+Reason:
+Requires hardware infrastructure.
+Enterprise ESG Reporting
+Reason:
+Focus remains on individual users.
+Marketplace Features
+Reason:
+Not directly aligned with problem statement.
+• 
+• 
+7
+6. Frontend Scope
+Responsibilities
+Frontend will handle:
+User Interface
+User Experience
+Data Visualization
+Form Handling
+Client-side Validation
+Pages
+Authentication
+Login
+Register
+Forgot Password
+Dashboard
+Carbon Overview
+Trends
+Recommendations
+Calculator
+Transportation
+Food
+Energy
+Shopping
+Goals
+Active Goals
+Completed Goals
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+8
+Carbon Twin
+Scenario Simulation
+Forecast Visualization
+Profile
+Preferences
+Settings
+7. Backend Scope
+Responsibilities
+Backend will handle:
+Business Logic
+Authentication
+Recommendation Logic
+Carbon Calculations
+Forecasting
+Services
+Auth Service
+Handles:
+Login
+Registration
+JWT Generation
+User Service
+Handles:
+Profiles
+Preferences
+Settings
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+9
+Carbon Service
+Handles:
+Carbon Calculations
+Emission Factors
+Carbon Records
+Recommendation Service
+Handles:
+User Analysis
+Recommendation Generation
+Recommendation Ranking
+Analytics Service
+Handles:
+Dashboard Metrics
+Trends
+Reports
+Carbon Twin Service
+Handles:
+Simulations
+Future Forecasting
+8. Database Scope
+User Data
+Stores:
+Profiles
+Preferences
+Goals
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+10
+Activity Data
+Stores:
+Transportation Records
+Food Records
+Energy Records
+Shopping Records
+Recommendation Data
+Stores:
+Recommendations
+Acceptance Status
+Impact Estimates
+Analytics Data
+Stores:
+Carbon Scores
+Historical Trends
+Monthly Reports
+9. Security Scope
+Helmet
+Used for:
+Security Headers
+Clickjacking Prevention
+MIME Sniffing Protection
+Rate Limiting
+Purpose:
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+11
+Prevent API abuse.
+Input Validation
+Technology:
+Zod
+Purpose:
+Prevent malformed requests.
+Authentication
+JWT-based access control.
+Password Security
+bcrypt hashing.
+Environment Security
+Secrets stored in:
+.env
+Excluded from repository.
+SQL Injection Protection
+Provided through:
+Prisma ORM
+12
+10. Efficiency Scope
+Database Indexing
+Indexes:
+user_id
+email
+created_at
+Caching
+Redis caches:
+Dashboard Data
+Recommendations
+Frequently Accessed Queries
+Pagination
+Implemented on:
+Activity History
+Recommendation Lists
+Lazy Loading
+Applied to:
+Charts
+Analytics
+Historical Data
+11. Testing Scope
+Unit Tests
+Coverage Targets:
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+13
+90%
+Modules:
+Carbon Calculations
+Recommendation Engine
+Goal Logic
+Integration Tests
+Coverage Targets:
+80%
+Areas:
+API Endpoints
+Database Operations
+Authentication
+End-to-End Tests
+Technology:
+Playwright
+Flows:
+Registration
+Login
+Carbon Calculation
+Recommendation Generation
+Goal Tracking
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+14
+12. Accessibility Scope
+WCAG 2.2 AA
+Required Compliance.
+Keyboard Navigation
+Supported.
+Screen Readers
+Supported.
+Color Contrast
+Minimum:
+4.5:1
+Responsive Design
+Supported on:
+Desktop
+Tablet
+Mobile
+13. Code Quality Standards
+Architecture
+Follow:
+SOLID Principles
+Clean Architecture
+• 
+• 
+• 
+• 
+• 
+15
+Separation of Concerns
+Naming
+Use:
+Consistent Naming Conventions
+Self-Documenting Code
+Documentation
+Required:
+README
+API Documentation
+Inline Comments for Complex Logic
+Linting
+Tool:
+ESLint
+Formatting
+Tool:
+Prettier
+14. Development Constraints
+Repository Requirements:
+Public Repository
+Single Branch
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+16
+Under 10 MB
+Development Requirements:
+TypeScript Only
+Git Version Control
+Automated Testing
+15. Deliverables
+Frontend
+Next.js Application
+Backend
+NestJS API
+Database
+PostgreSQL Schema
+Testing
+Jest Tests
+Supertest Tests
+Playwright Tests
+Documentation
+README
+Architecture Docs
+API Docs
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+17
+16. Success Criteria
+Engineering is considered successful when:
+✅ Carbon calculations are accurate
+✅ Recommendations are personalized
+✅ Security best practices are implemented
+✅ Performance remains efficient
+✅ Accessibility requirements are satisfied
+✅ Codebase remains maintainable
+✅ Test coverage targets are achieved
+✅ Users can understand, track, and reduce their carbon footprint effectively
+18
+
+
+--- Information Architecture for CarbonWise.pdf ---
+Information Architecture
+Project Name
+CarbonWise
+Version: 1.0
+Status: Approved
+1. Purpose
+This document defines how information is organized, structured, navigated, and presented throughout
+CarbonWise.
+The goal is to ensure users can easily:
+Understand their carbon footprint
+Track sustainability progress
+Reduce emissions through personalized actions
+while maintaining:
+Accessibility
+Simplicity
+Discoverability
+Scalability
+2. Information Architecture Goals
+Primary Goals
+Understand
+Help users quickly identify:
+Carbon Score
+Emission Sources
+Sustainability Status
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+1
+Track
+Help users monitor:
+Trends
+Goals
+Historical Data
+Reduce
+Help users discover:
+Personalized Recommendations
+High Impact Actions
+Future Opportunities
+3. Core Navigation Structure
+Home
+│
+├── Dashboard
+│
+├── Carbon Calculator
+│
+├── Recommendations
+│
+├── Goals
+│
+├── Carbon Twin
+│
+├── Activity History
+│
+├── Profile
+│
+└── Settings
+4. User Journey Architecture
+• 
+• 
+• 
+• 
+• 
+• 
+2
+First-Time User
+Goal
+Understand footprint and receive first recommendation.
+Flow
+Landing Page
+↓
+Register
+↓
+Onboarding
+↓
+Initial Carbon Assessment
+↓
+Carbon Score
+↓
+Recommendations
+↓
+Goal Creation
+↓
+Dashboard
+Outcome
+User understands:
+Current footprint• 
+3
+Major emission source
+First action to take
+Returning User
+Goal
+Track progress and improve sustainability.
+Flow
+Login
+↓
+Dashboard
+↓
+Review Trends
+↓
+View Recommendations
+↓
+Log Activities
+↓
+Track Goals
+↓
+Review Carbon Twin
+5. Content Hierarchy
+Information is prioritized according to challenge requirements.
+• 
+• 
+4
+Level 1 (Highest Priority)
+Directly solves problem statement.
+Carbon Score
+Recommendations
+Emission Breakdown
+Progress Tracking
+Level 2
+Supports behavior change.
+Goals
+Challenges
+Activity History
+Level 3
+Supporting information.
+Profile
+Settings
+Help Center
+6. Dashboard Architecture
+The dashboard is the most important page.
+5
+Dashboard Layout
+Dashboard
+├── Carbon Score
+│
+├── Sustainability Rating
+│
+├── Emission Breakdown
+│
+├── Top Recommendation
+│
+├── Goal Progress
+│
+├── Monthly Trends
+│
+└── Carbon Twin Preview
+Carbon Score Card
+Displays:
+Current Score
+Monthly Change
+Sustainability Rating
+Example
+Carbon Score: 68
+Rating: Improving
+Monthly Change:
++8%
+• 
+• 
+• 
+6
+Emission Breakdown
+Displays:
+Transportation
+Food
+Energy
+Shopping
+Visualization
+Charts:
+Pie Chart
+Bar Chart
+Purpose:
+Identify hotspots quickly.
+Top Recommendation Widget
+Displays:
+Highest Impact Recommendation
+Includes:
+Estimated Savings
+Difficulty Level
+Quick Action Button
+• 
+• 
+• 
+• 
+• 
+7
+Goal Progress Widget
+Displays:
+Goal Completion %
+Remaining Reduction
+Next Milestone
+Carbon Twin Widget
+Displays:
+What If Preview
+Example:
+Use Public Transport
+↓
+Potential Reduction
+120 kg CO₂/year
+7. Carbon Calculator Architecture
+Purpose:
+Help users understand emissions.
+Calculator Structure
+Carbon Calculator
+├── Transportation
+│
+├── Food
+• 
+• 
+• 
+8
+│
+├── Energy
+│
+└── Shopping
+Transportation Section
+Collects:
+Vehicle Type
+Distance
+Fuel Type
+Frequency
+Food Section
+Collects:
+Diet Type
+Weekly Consumption
+Meal Patterns
+Energy Section
+Collects:
+Electricity Usage
+Appliance Usage
+Heating Usage
+Shopping Section
+Collects:
+Product Type
+Purchase Frequency
+Spending Category
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+9
+Output
+After submission:
+Carbon Score
+↓
+Category Breakdown
+↓
+Recommendations
+8. Recommendations Architecture
+Purpose:
+Help users reduce emissions.
+Structure
+Recommendations
+├── High Impact
+│
+├── Medium Impact
+│
+└── Low Impact
+Recommendation Card
+Contains:
+10
+Title
+Example:
+Replace Two Car Trips Weekly
+Estimated Savings
+Example:
+120 kg CO₂/year
+Difficulty
+Options:
+Easy
+Medium
+Hard
+Action Button
+Example:
+Start Goal
+Recommendation Prioritization
+Order:
+Impact
+↓
+11
+Feasibility
+↓
+User Preferences
+↓
+Goal Alignment
+9. Goal Architecture
+Purpose:
+Enable measurable progress.
+Structure
+Goals
+├── Active Goals
+│
+├── Completed Goals
+│
+└── Milestones
+Goal Card
+Displays:
+Goal Name
+Progress %
+Deadline
+Estimated Savings
+• 
+• 
+• 
+• 
+12
+Example
+Reduce Transportation Emissions
+Progress:
+40%
+Target:
+20% Reduction
+10. Carbon Twin Architecture
+Purpose:
+Provide predictive insights.
+Structure
+Carbon Twin
+├── Current Lifestyle
+│
+├── Scenario Builder
+│
+└── Forecast Results
+Scenario Builder
+Users select:
+Transportation Changes
+Food Changes
+Energy Changes
+• 
+• 
+• 
+13
+Forecast Results
+Displays:
+Current Emissions
+↓
+Projected Emissions
+↓
+Potential Reduction
+Example
+Current:
+250 kg CO₂
+Future:
+180 kg CO₂
+Savings:
+70 kg CO₂
+11. Activity History Architecture
+Purpose:
+Support tracking.
+14
+Structure
+Activity History
+├── Transportation
+│
+├── Food
+│
+├── Energy
+│
+└── Shopping
+Features
+Filtering
+Search
+Date Range Selection
+12. Profile Architecture
+Purpose:
+Enable personalization.
+Structure
+Profile
+├── Personal Information
+│
+├── Sustainability Preferences
+│
+├── Goals
+│
+└── Recommendation Preferences
+• 
+• 
+• 
+15
+Stored Preferences
+Examples:
+Diet Type
+Preferred Transportation
+Target Reduction
+Notification Settings
+13. Mobile Information Architecture
+Because most users are mobile-first.
+Bottom Navigation
+Dashboard
+Calculator
+Recommendations
+Goals
+Profile
+Mobile Priority Order
+Carbon Score
+Recommendations
+Goals
+Tracking
+1. 
+2. 
+3. 
+4. 
+16
+14. Accessibility Architecture
+Supports judging criteria.
+WCAG 2.2 AA
+Required.
+Semantic HTML
+Examples:
+<header>
+<nav>
+<main>
+<section>
+<footer>
+Keyboard Navigation
+Supported.
+Screen Readers
+Supported.
+ARIA Labels
+Applied to:
+Buttons
+Forms
+Charts
+• 
+• 
+• 
+17
+Color Accessibility
+Minimum contrast:
+4.5:1
+15. Search Architecture
+Users can search:
+Recommendations
+Goals
+Activities
+Sustainability Topics
+16. Personalization Architecture
+The interface adapts based on:
+Carbon Score
+Emission Hotspots
+Goal Status
+Recommendation Adoption
+Example
+High Transportation User:
+Shows:
+Transportation Recommendations First
+High Food Impact User:
+Shows:
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+18
+Food Recommendations First
+17. Future Expansion
+Architecture supports:
+Community Challenges
+AI Carbon Coach
+Smart Device Integration
+Sustainability Marketplace
+without major restructuring.
+18. Information Architecture Success Criteria
+The information architecture is successful when:
+✅ Users understand their footprint within 60 seconds
+✅ Users find recommendations within 2 clicks
+✅ Users can create goals within 1 minute
+✅ Users can access Carbon Twin simulations easily
+✅ Accessibility standards are met
+✅ Navigation remains intuitive
+✅ The platform directly supports:
+Understand
+Track
+Reduce
+objectives from the challenge statement.
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+19
+
+
+--- Monorepo Structure.pdf ---
+Monorepo Structure
+Project Name
+CarbonWise
+Version: 1.0
+Status: Approved
+Repository Type: Monorepo
+1. Purpose
+This document defines the repository organization, project structure, ownership boundaries, shared
+libraries, development workflow, and code organization strategy for CarbonWise.
+The repository structure is designed to maximize:
+Code Quality (High Impact)
+Maintainability
+Scalability
+Testability
+Security
+while remaining simple enough for challenge evaluation.
+2. Repository Principles
+The repository follows:
+Separation of Concerns
+Business logic should not mix with UI logic.
+Modular Development
+Features should be independently maintainable.
+• 
+• 
+• 
+• 
+• 
+1
+Reusability
+Shared code belongs in dedicated packages.
+Testability
+Every major module must support unit and integration testing.
+3. Repository Structure
+```text id="repo-root" carbonwise/
+├── apps/ │ ├── packages/ │ ├── infrastructure/ │ ├── tests/ │ ├── docs/ │ ├── scripts/
+│ ├── .github/ │ ├── .env.example │ ├── package.json │ └── README.md 
+---
+# 4. Apps Directory
+Contains deployable applications.
+```text id="apps-root"
+apps/
+├── web/
+│
+└── api/
+5. Frontend Application
+Location:
+```text id="frontend-path" apps/web 
+Technology:
+```text id="frontend-stack"
+Next.js 15
+2
+TypeScript
+Tailwind CSS
+Shadcn/UI
+Structure
+```text id="frontend-structure" web/
+├── src/ │ ├── public/ │ ├── tests/ │ └── package.json 
+---
+# Source Structure
+```text id="frontend-src"
+src/
+├── app/
+│
+├── components/
+│
+├── features/
+│
+├── hooks/
+│
+├── services/
+│
+├── store/
+│
+├── types/
+│
+├── utils/
+│
+└── lib/
+App Directory
+Contains:
+3
+```text id="app-dir" Pages
+Layouts
+Routing
+Metadata 
+---
+# Components Directory
+Contains reusable UI.
+Examples:
+```text id="components-examples"
+Button
+Card
+Modal
+Input
+Chart
+Features Directory
+Contains feature-specific modules.
+```text id="features-list" features/
+├── auth/ │ ├── dashboard/ │ ├── calculator/ │ ├── recommendations/ │ ├── goals/ │
+└── carbon-twin/ 
+---
+# Why Feature-Based?
+Supports:
+4
+```text id="quality-impact"
+Code Quality (High Impact)
+by reducing coupling.
+6. Backend Application
+Location:
+```text id="backend-path" apps/api 
+Technology:
+```text id="backend-stack"
+NestJS
+TypeScript
+Structure
+```text id="backend-structure" api/
+├── src/ │ ├── test/ │ └── package.json 
+---
+# Backend Source Structure
+```text id="backend-src"
+src/
+├── modules/
+│
+├── common/
+│
+├── config/
+│
+├── database/
+5
+│
+└── main.ts
+Modules Directory
+Contains business domains.
+```text id="modules-list" modules/
+├── auth/ │ ├── users/ │ ├── activities/ │ ├── carbon/ │ ├── recommendations/ │ ├──
+goals/ │ ├── analytics/ │ ├── carbon-twin/ │ └── notifications/ 
+---
+# Example Module Structure
+```text id="module-example"
+auth/
+├── controllers/
+│
+├── services/
+│
+├── dto/
+│
+├── entities/
+│
+├── guards/
+│
+└── tests/
+Why This Structure?
+Supports:
+SOLID Principles
+Maintainability
+Testability
+• 
+• 
+• 
+6
+7. Shared Packages
+Location:
+```text id="shared-path" packages/ 
+---
+## Structure
+```text id="packages-structure"
+packages/
+├── ui/
+│
+├── validation/
+│
+├── types/
+│
+├── constants/
+│
+└── utilities/
+UI Package
+Contains:
+```text id="ui-package" Buttons
+Cards
+Forms
+Charts 
+Used by:
+```text id="ui-consumers"
+Frontend
+7
+Validation Package
+Contains:
+```text id="validation-package" Zod Schemas
+Input Validators 
+Used by:
+```text id="validation-consumers"
+Frontend
+Backend
+Types Package
+Contains:
+```text id="types-package" Shared Interfaces
+API Contracts
+Enums 
+---
+# Utilities Package
+Contains:
+```text id="utilities-package"
+Formatters
+Date Helpers
+Calculation Helpers
+8
+8. Database Layer
+Location:
+```text id="database-path" apps/api/src/database 
+---
+## Structure
+```text id="database-structure"
+database/
+├── prisma/
+│
+├── migrations/
+│
+└── seed/
+Prisma Directory
+Contains:
+```text id="prisma-files" schema.prisma
+generated/ 
+---
+# Migrations Directory
+Contains:
+```text id="migration-files"
+Database Migrations
+Seed Directory
+Contains:
+9
+```text id="seed-files" Development Data
+Emission Factors 
+---
+# 9. Infrastructure Directory
+Location:
+```text id="infra-path"
+infrastructure/
+Structure
+```text id="infra-structure" infrastructure/
+├── docker/ │ ├── nginx/ │ ├── monitoring/ │ └── deployment/ 
+---
+# Docker
+Contains:
+```text id="docker-files"
+Dockerfiles
+docker-compose.yml
+Monitoring
+Contains:
+```text id="monitoring-files" Metrics
+Alerts
+Dashboards 
+10
+---
+# Deployment
+Contains:
+```text id="deployment-files"
+Deployment Scripts
+Release Configurations
+10. Testing Structure
+Location:
+```text id="testing-path" tests/ 
+---
+## Structure
+```text id="testing-structure"
+tests/
+├── unit/
+│
+├── integration/
+│
+├── e2e/
+│
+└── accessibility/
+Unit Tests
+Technology:
+```text id="unit-tech" Jest 
+11
+---
+# Integration Tests
+Technology:
+```text id="integration-tech"
+Supertest
+End-to-End Tests
+Technology:
+```text id="e2e-tech" Playwright 
+---
+# Accessibility Tests
+Technology:
+```text id="accessibility-tech"
+axe-core
+Playwright
+11. Documentation Structure
+Location:
+```text id="docs-path" docs/ 
+---
+## Structure
+```text id="docs-structure"
+docs/
+12
+├── architecture/
+│
+├── api/
+│
+├── database/
+│
+├── testing/
+│
+└── deployment/
+Purpose
+Maintain project transparency.
+Supports:
+```text id="maintainability" Maintainability 
+---
+# 12. GitHub Structure
+Location:
+```text id="github-path"
+.github/
+Structure
+```text id="github-structure" .github/
+├── workflows/ │ └── templates/ 
+---
+# Workflows
+Examples:
+```text id="workflow-list"
+13
+ci.yml
+security.yml
+deploy.yml
+13. Security Organization
+Supports:
+```text id="security-impact" Security (Medium Impact) 
+---
+# Sensitive Data
+Never stored in:
+```text id="forbidden-storage"
+Source Code
+Repository
+Commits
+Stored in:
+```text id="allowed-storage" Environment Variables 
+---
+# Security Components
+```text id="security-components"
+JWT
+Helmet
+bcrypt
+Rate Limiter
+14
+Zod Validation
+14. Performance Organization
+Supports:
+```text id="efficiency-impact" Efficiency (Medium Impact) 
+---
+# Redis Layer
+Location:
+```text id="redis-location"
+apps/api/src/modules/cache
+Cached Resources
+```text id="cached-resources" Dashboard
+Recommendations
+Analytics
+Carbon Twin Results 
+---
+# Database Optimization
+Includes:
+```text id="db-optimization"
+Indexes
+Pagination
+15
+Selective Queries
+15. Code Standards
+Supports:
+```text id="code-quality-impact" Code Quality (High Impact) 
+---
+# Linting
+Tool:
+```text id="eslint-tool"
+ESLint
+Formatting
+Tool:
+```text id="prettier-tool" Prettier 
+---
+# Naming Conventions
+### Files
+```text id="file-naming"
+kebab-case
+Example:
+```text id="file-example" carbon-score.service.ts 
+16
+---
+### Classes
+```text id="class-naming"
+PascalCase
+Example:
+```text id="class-example" CarbonCalculatorService 
+---
+### Variables
+```text id="variable-naming"
+camelCase
+Example:
+```text id="variable-example" carbonScore 
+---
+# 16. Accessibility Organization
+Supports:
+```text id="accessibility-impact"
+Accessibility (Low Impact)
+Accessibility validation exists inside:
+```text id="accessibility-folder" tests/accessibility 
+---
+Checks include:
+- Keyboard Navigation
+17
+- Color Contrast
+- Screen Reader Support
+- ARIA Compliance
+---
+# 17. Repository Compliance
+Challenge Requirements:
+✅ Public Repository
+✅ Single Branch
+✅ Complete Source Code
+✅ README Included
+✅ Under 10 MB
+---
+# 18. Future Expansion
+Architecture supports future modules:
+```text id="future-modules"
+AI Carbon Coach
+Community Challenges
+Smart Device Integrations
+Enterprise Dashboard
+Advanced Forecasting
+without restructuring.
+19. Success Criteria
+The repository structure is successful when:
+✅ Code is easy to navigate
+18
+✅ Features remain modular
+✅ Tests are organized
+✅ Security concerns are isolated
+✅ Shared code is reusable
+✅ Development remains scalable
+✅ New contributors can onboard quickly
+✅ Code Quality remains high throughout the project lifecycle
+19
+
+
+--- Product Requirements Document - CarbonWise.pdf ---
+Product Requirements Document (PRD)
+CarbonWise
+Version: 1.0
+Status: Draft
+1. Executive Summary
+CarbonWise is an intelligent sustainability assistant that helps individuals understand, track, and reduce
+their carbon footprint through personalized recommendations, behavioral insights, and measurable
+sustainability goals.
+Unlike traditional carbon calculators that simply estimate emissions, CarbonWise continuously analyzes
+user behavior , identifies emission hotspots, and recommends simple, actionable changes that maximize
+environmental impact while minimizing user effort.
+The platform acts as a personal carbon coach that transforms sustainability data into practical decisions.
+2. Problem Statement
+Individuals contribute to carbon emissions through transportation, food consumption, energy usage, and
+purchasing behavior , but most people:
+Do not understand their personal carbon footprint
+Cannot identify major emission sources
+Lack personalized guidance
+Struggle to maintain sustainable habits
+Cannot measure progress effectively
+As a result, sustainability awareness rarely translates into long-term behavior change.
+3. Product Vision
+Enable every individual to make environmentally responsible decisions through personalized carbon
+intelligence.
+• 
+• 
+• 
+• 
+• 
+1
+4. Product Mission
+Reduce personal carbon emissions by helping users understand their environmental impact and guiding
+them toward practical, sustainable actions.
+5. Challenge Alignment
+The solution directly addresses:
+Design a solution that helps individuals understand, track, and reduce their carbon footprint
+through simple actions and personalized insights.
+Understand
+Users gain visibility into:
+Carbon score
+Emission categories
+High-impact activities
+Sustainability patterns
+Track
+Users monitor:
+Daily emissions
+Monthly emissions
+Historical trends
+Sustainability goals
+Recommendation adoption
+Reduce
+Users receive:
+Personalized recommendations
+Impact forecasts
+Action plans
+Sustainability challenges
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+2
+6. Target Audience
+Primary Audience
+Students
+Characteristics:
+Technology friendly
+Sustainability curious
+Budget conscious
+Goals:
+Learn sustainable habits
+Reduce environmental impact
+Working Professionals
+Characteristics:
+Limited time
+Data-driven
+Goals:
+Efficient sustainability improvements
+Automated tracking
+Families
+Characteristics:
+Shared consumption patterns
+Goals:
+Reduce household emissions
+Build sustainable lifestyles
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+3
+7. User Personas
+Persona 1
+Name: Rahul
+Age: 21
+Occupation: Engineering Student
+Pain Points:
+Doesn't understand carbon footprint
+Wants practical sustainability guidance
+Goals:
+Lower transportation emissions
+Learn sustainability fundamentals
+Persona 2
+Name: Priya
+Age: 29
+Occupation: Software Engineer
+Pain Points:
+Limited time
+Too much generic advice online
+Goals:
+Receive personalized recommendations
+Track measurable progress
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+4
+8. Product Objectives
+Primary Objectives
+Improve carbon footprint awareness
+Deliver personalized sustainability insights
+Encourage behavior change
+Track environmental progress
+Secondary Objectives
+Improve sustainability literacy
+Increase user engagement
+Build long-term habits
+9. Core Features
+Carbon Intelligence Dashboard
+Provides:
+Carbon Score
+Emission Breakdown
+Trend Analysis
+Sustainability Rating
+Purpose:
+Help users understand environmental impact.
+Carbon Calculator
+Categories:
+Transportation
+Examples:
+Cars
+Bikes
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+5
+Flights
+Public Transport
+Food
+Examples:
+Meat Consumption
+Dairy Consumption
+Vegetarian Meals
+Energy
+Examples:
+Electricity Usage
+Heating
+Cooling
+Shopping
+Examples:
+Clothing
+Electronics
+Household Goods
+Purpose:
+Generate accurate carbon estimates.
+Personalized Recommendation Engine
+Purpose:
+Generate recommendations based on individual behavior .
+Examples:
+Transportation Heavy User:
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+6
+Recommendation:
+Bike twice weekly
+Estimated Impact:
+120 kg CO₂ reduction annually
+Food Heavy User:
+Recommendation:
+Replace two meat meals weekly
+Estimated Impact:
+90 kg CO₂ reduction annually
+Sustainability Goals
+Users can:
+Create goals
+Track progress
+Complete milestones
+Monitor reductions
+Carbon Twin Simulator
+Purpose:
+Predict future emissions.
+Examples:
+"What happens if I switch to public transport?"
+"What happens if I reduce meat consumption?"
+Output:
+Predicted emissions
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+7
+Estimated savings
+Sustainability forecast
+Sustainability Challenges
+Examples:
+Car-Free Week
+Meat-Free Month
+Energy Saver Challenge
+Purpose:
+Increase engagement and behavior change.
+10. Functional Requirements
+FR-01
+Users shall create accounts.
+FR-02
+Users shall calculate carbon emissions.
+FR-03
+Users shall view carbon breakdowns.
+FR-04
+Users shall receive personalized recommendations.
+FR-05
+Users shall track sustainability goals.
+• 
+• 
+• 
+• 
+• 
+8
+FR-06
+Users shall view historical trends.
+FR-07
+Users shall simulate future sustainability scenarios.
+FR-08
+Users shall participate in sustainability challenges.
+11. Non-Functional Requirements
+Code Quality (High Impact)
+Requirements:
+TypeScript throughout frontend
+Modular architecture
+SOLID principles
+Clear folder structure
+Reusable components
+Security (Medium Impact)
+Requirements:
+Helmet security headers
+JWT authentication
+bcrypt password hashing
+Input validation
+Rate limiting
+Secure environment variables
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+9
+Efficiency (Medium Impact)
+Requirements:
+PostgreSQL indexing
+Redis caching
+Pagination
+Lazy loading
+Optimized API responses
+Testing (Low Impact)
+Requirements:
+Unit Testing
+Tool:
+Jest
+Integration Testing
+Tool:
+Supertest
+End-to-End Testing
+Tool:
+Playwright
+Coverage:
+Registration
+Login
+Dashboard
+Recommendations
+Goal Tracking
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+10
+Accessibility (Low Impact)
+Requirements:
+WCAG 2.2 AA
+Semantic HTML
+Keyboard Navigation
+Screen Reader Support
+High Contrast Design
+12. Success Metrics
+Product Metrics
+Daily Active Users
+Monthly Active Users
+Retention Rate
+Sustainability Metrics
+Carbon Reduction Achieved
+Recommendation Adoption Rate
+Goal Completion Rate
+Technical Metrics
+API Response < 500ms
+Dashboard Load < 2s
+Uptime > 99.9%
+13. Future Roadmap
+Phase 1
+Carbon Calculator
+Dashboard
+Authentication
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+11
+Phase 2
+Recommendation Engine
+AI Carbon Coach
+Phase 3
+Goals
+Challenges
+Achievements
+Phase 4
+Carbon Twin
+Forecasting Engine
+14. Assumptions
+The following assumptions were made:
+Users will manually enter activity data initially
+Carbon emission factors will come from publicly available datasets
+Recommendations are advisory only
+Carbon calculations are estimates, not regulatory measurements
+15. Definition of Success
+CarbonWise is successful when users:
+Understand their carbon footprint
+Identify emission hotspots
+Receive personalized sustainability guidance
+Take measurable actions
+Reduce emissions over time
+Develop long-term sustainable habits
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+12
+
+
+--- Scoring Engine Specification.pdf ---
+Scoring Engine Specification
+Project Name
+CarbonWise
+Version: 1.0
+Status: Approved
+1. Purpose
+The Scoring Engine is the intelligence core of CarbonWise.
+Its responsibility is to transform user activities into:
+Carbon Footprint Understanding
+Sustainability Tracking
+Personalized Reduction Opportunities
+This engine directly powers the challenge objectives:
+Understand
+↓
+Track
+↓
+Reduce
+2. Design Principles
+The scoring system must be:
+Transparent
+Users should understand why they received a score.
+• 
+• 
+• 
+1
+Actionable
+Every score should lead to a recommendation.
+Personalized
+Different users should receive different recommendations.
+Explainable
+Users should understand:
+Their hotspots
+Their opportunities
+Their progress
+3. Scoring Architecture
+User Activities
+↓
+Carbon Calculation Engine
+↓
+Emission Aggregation
+↓
+Carbon Score Engine
+↓
+Hotspot Detection
+↓
+Recommendation Engine
+↓
+• 
+• 
+• 
+2
+Carbon Twin Simulation
+4. Carbon Categories
+The scoring engine evaluates four primary emission categories.
+Transportation
+Examples:
+Car Travel
+Motorcycle Travel
+Flights
+Taxi Usage
+Public Transport
+Food
+Examples:
+Meat Consumption
+Dairy Consumption
+Vegetarian Meals
+Vegan Meals
+Energy
+Examples:
+Electricity Usage
+Heating
+Cooling
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+3
+Shopping
+Examples:
+Clothing
+Electronics
+Household Purchases
+5. Carbon Calculation Formula
+Every activity is converted into emissions.
+Formula
+Emission
+=
+Activity Quantity
+×
+Emission Factor
+Example
+Car Travel
+100 km
+×
+0.192 kg CO₂/km
+=
+19.2 kg CO₂
+• 
+• 
+• 
+4
+Example
+Flight
+500 km
+×
+0.255 kg CO₂/km
+=
+127.5 kg CO₂
+6. Category Aggregation
+Each category is calculated independently.
+Transportation
+Car
++
+Bus
++
+Train
++
+Flight
+Food
+Meat
+5
++
+Dairy
++
+Other Food Sources
+Energy
+Electricity
++
+Heating
++
+Cooling
+Shopping
+Clothing
++
+Electronics
++
+Household Purchases
+7. Carbon Score Model
+The platform converts emissions into a user-friendly score.
+6
+Score Range
+0 – 100
+Where:
+100 = Excellent
+0 = Extremely High Impact
+Formula
+Carbon Score
+=
+100
+-
+Normalized Emissions
+Example
+Monthly Emission
+=
+180 kg CO₂e
+↓
+Normalized
+↓
+Score = 68
+7
+8. Sustainability Rating System
+The score is translated into understandable ratings.
+Eco Champion
+Score: 85 – 100
+Meaning:
+Very Low Carbon Impact
+Sustainable
+Score: 70 – 84
+Meaning:
+Good Sustainability Practices
+Improving
+Score: 50 – 69
+Meaning:
+Moderate Impact
+High Impact
+Score: 25 – 49
+Meaning:
+8
+Significant Reduction Opportunities
+Critical
+Score: 0 – 24
+Meaning:
+Immediate Improvement Needed
+9. Hotspot Detection Engine
+Purpose:
+Identify the largest emission source.
+Formula
+Category %
+=
+Category Emission
+/
+Total Emission
+× 100
+Example
+Transportation = 55%
+Food = 20%
+Energy = 15%
+9
+Shopping = 10%
+Result
+Primary Hotspot
+=
+Transportation
+10. Recommendation Priority Engine
+Purpose:
+Determine which actions create the largest impact.
+Priority Formula
+Priority Score
+=
+Impact Potential
+×
+Feasibility
+×
+User Preference Alignment
+Impact Potential
+Measures:
+10
+How much CO₂ can be reduced
+Feasibility
+Measures:
+How realistic the change is
+Preference Alignment
+Measures:
+How compatible the action is
+with user behavior
+Example
+Public Transport
+Impact = 9
+Feasibility = 8
+Alignment = 7
+Priority
+=
+504
+11
+11. Personalized Insight Engine
+This is one of the most important parts of the project.
+The challenge requires:
+Personalized Insights
+User A
+Main Emission:
+Transportation
+Recommendation:
+Use Public Transport
+User B
+Main Emission:
+Food
+Recommendation:
+Reduce Meat Consumption
+User C
+Main Emission:
+Energy
+12
+Recommendation:
+Reduce Electricity Usage
+12. Recommendation Difficulty Levels
+Each recommendation receives a difficulty score.
+Easy
+Examples:
+Turn Off Unused Lights
+Walk Short Distances
+Medium
+Examples:
+Use Public Transport
+Reduce Meat Consumption
+Hard
+Examples:
+Purchase Electric Vehicle
+Install Solar Panels
+13
+13. Goal Progress Engine
+Purpose:
+Track measurable improvements.
+Formula
+Progress %
+=
+Current Reduction
+/
+Target Reduction
+×
+100
+Example
+Target:
+100 kg CO₂
+Current:
+40 kg CO₂
+Progress:
+40%
+14
+14. Sustainability Improvement Score
+Measures progress over time.
+Formula
+Improvement
+=
+Previous Emission
+-
+Current Emission
+Example
+Previous Month
+250 kg CO₂
+Current Month
+180 kg CO₂
+Improvement
+70 kg CO₂
+15. Recommendation Adoption Score
+Measures user engagement.
+15
+Formula
+Accepted Recommendations
+/
+Total Recommendations
+×
+100
+Example
+Accepted = 8
+Generated = 10
+Adoption Rate = 80%
+16. Carbon Twin Forecast Engine
+Purpose:
+Predict future outcomes.
+Inputs
+Current Activities
+Goals
+Recommendation History
+User Preferences
+• 
+• 
+• 
+• 
+16
+Output
+Current Emissions
+↓
+Projected Emissions
+↓
+Potential Savings
+Example
+User Scenario:
+Reduce Car Usage
+Output:
+Current
+250 kg CO₂
+Projected
+180 kg CO₂
+Savings
+70 kg CO₂
+17. Anti-Gaming Rules
+Purpose:
+Prevent unrealistic inputs.
+17
+Validation Rule 1
+Reject impossible values.
+Example:
+50,000 km cycling in one day
+Validation Rule 2
+Reject negative values.
+Example:
+-200 kWh Electricity
+Validation Rule 3
+Reject duplicate submissions.
+Example:
+Same activity
+submitted repeatedly
+18. Performance Requirements
+Supports:
+Efficiency (Medium Impact)
+18
+Carbon Calculation
+Target:
+<100 ms
+Recommendation Generation
+Target:
+<500 ms
+Dashboard Load
+Target:
+<2 seconds
+19. Testing Requirements
+Supports:
+Testing (Low Impact)
+Unit Tests
+Required For:
+Carbon Calculation Logic
+Score Generation
+Hotspot Detection
+Recommendation Ranking
+• 
+• 
+• 
+• 
+19
+Integration Tests
+Required For:
+Database Integration
+API Integration
+End-to-End Tests
+Required For:
+Calculator
+↓
+Score
+↓
+Recommendation
+↓
+Goal Creation
+using:
+Playwright
+20. Success Metrics
+The scoring engine is successful when:
+✅ Users understand their score
+✅ Hotspots are correctly identified
+✅ Recommendations are personalized
+✅ Progress is measurable
+• 
+• 
+20
+✅ Carbon Twin forecasts are meaningful
+✅ Scores remain consistent
+✅ Recommendation adoption improves over time
+✅ The engine directly supports:
+Understand
+Track
+Reduce
+objectives from the challenge statement.
+• 
+• 
+• 
+21
+
+
+--- System Architecture - CarbonWise.pdf ---
+System Architecture
+Project Name
+CarbonWise
+Version: 1.0
+Status: Approved
+1. Architecture Overview
+CarbonWise is designed as an AI-powered sustainability intelligence platform that helps users understand,
+track, and reduce their carbon footprint through personalized recommendations and predictive
+sustainability planning.
+The architecture prioritizes:
+Problem Statement Alignment
+Code Quality
+Security
+Efficiency
+Maintainability
+Scalability
+The system follows a modular service-oriented architecture built using modern TypeScript technologies.
+2. Architectural Principles
+2.1 Problem Statement First
+Every component must support one or more of the following:
+Understand
+Help users identify carbon impact.
+Track
+Help users monitor progress.
+• 
+• 
+• 
+• 
+• 
+• 
+1
+Reduce
+Help users take actionable steps.
+2.2 Maintainability
+The architecture must:
+Follow SOLID principles
+Support modular development
+Enable independent testing
+Reduce code duplication
+2.3 Security by Design
+Security is implemented at every layer .
+Examples:
+JWT Authentication
+Helmet Headers
+Input Validation
+Rate Limiting
+2.4 Scalability
+The system must support:
+Growing user base
+Increasing activity records
+Future AI enhancements
+3. High-Level Architecture
+┌─────────────────────────────┐
+│          User               │
+└──────────────┬──────────────┘
+               │
+               ▼
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+2
+┌─────────────────────────────┐
+│     Next.js Frontend        │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│      NestJS Backend         │
+└──────┬───────┬──────────────┘
+       │       │
+       ▼       ▼
+┌─────────────┐
+│Auth Service │
+└─────────────┘
+┌─────────────┐
+│User Service │
+└─────────────┘
+┌─────────────┐
+│Carbon Engine│
+└─────────────┘
+┌─────────────┐
+│Recommend.   │
+│Engine       │
+└─────────────┘
+┌─────────────┐
+│Carbon Twin  │
+│Engine       │
+└─────────────┘
+       │
+       ▼
+┌─────────────┐
+│ PostgreSQL  │
+└─────────────┘
+       │
+       ▼
+┌─────────────┐
+│    Redis    │
+└─────────────┘
+3
+4. Core System Components
+The platform consists of five major business engines.
+5. Authentication Engine
+Purpose
+Provide secure access control.
+Responsibilities
+Registration
+Login
+JWT Generation
+Session Validation
+Password Reset
+Technologies
+NestJS
+JWT
+bcrypt
+Passport
+Security Features
+Password Hashing
+bcrypt
+• 
+• 
+• 
+• 
+• 
+4
+Access Tokens
+15 Minutes
+Refresh Tokens
+30 Days
+6. User Intelligence Engine
+Purpose
+Maintain user sustainability profiles.
+Responsibilities
+Store:
+User Information
+Preferences
+Goals
+Historical Activities
+Recommendation History
+Example
+User Profile:
+{
+"diet":"mixed",
+"transport":"car",
+"goal":"reduce 20%"
+}
+• 
+• 
+• 
+• 
+• 
+5
+7. Carbon Intelligence Engine
+Purpose
+Calculate carbon emissions.
+This engine directly supports:
+Understand
+portion of the challenge.
+Responsibilities
+Calculate emissions from:
+Transportation
+Cars
+Flights
+Public Transport
+Bikes
+Food
+Meat
+Dairy
+Vegetarian
+Vegan
+Energy
+Electricity
+Heating
+Cooling
+Shopping
+Clothing
+Electronics
+Household Goods
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+6
+Processing Flow
+User Activity
+↓
+Activity Classification
+↓
+Emission Factor Lookup
+↓
+Carbon Calculation
+↓
+Category Aggregation
+↓
+Carbon Score
+Output
+{
+"score":67,
+"transportation":45,
+"food":20,
+"energy":25,
+"shopping":10
+}
+8. Recommendation Engine
+Purpose
+Help users reduce emissions.
+7
+This engine directly supports:
+Reduce
+portion of the challenge.
+Responsibilities
+Analyze emissions
+Identify hotspots
+Generate recommendations
+Estimate impact
+Recommendation Pipeline
+User Data
+↓
+Carbon Analysis
+↓
+Hotspot Detection
+↓
+Impact Analysis
+↓
+Recommendation Ranking
+↓
+Personalized Actions
+Example
+Input:
+• 
+• 
+• 
+• 
+8
+Transportation = 60%
+Output:
+Use public transport twice weekly
+Estimated Savings:
+120 kg CO₂/year
+9. Carbon Twin Engine
+Purpose
+Provide predictive sustainability insights.
+This is the platform's differentiating feature.
+Responsibilities
+Future Simulation
+Scenario Analysis
+Impact Forecasting
+Example
+User asks:
+What if I stop driving?
+System simulates:
+Current Emission
+↓
+Projected Emission
+• 
+• 
+• 
+9
+↓
+Potential Savings
+Benefits
+Users understand consequences before changing behavior .
+10. Analytics Engine
+Purpose
+Track user progress.
+This directly supports:
+Track
+portion of the challenge.
+Responsibilities
+Trend Analysis
+Progress Tracking
+Goal Tracking
+Monthly Reports
+Outputs
+Dashboard Metrics
+Carbon Score
+Monthly Emissions
+Recommendation Adoption
+Goal Completion
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+10
+11. Frontend Architecture
+Framework
+Next.js 15
+Language
+TypeScript
+UI Layer
+Shadcn/UI
+TailwindCSS
+State Management
+TanStack Query
+Responsibilities
+User Interface
+Data Visualization
+Form Handling
+Accessibility
+Major Pages
+Dashboard
+Calculator
+• 
+• 
+• 
+• 
+11
+Goals
+Recommendations
+Carbon Twin
+Profile
+12. Backend Architecture
+Framework
+NestJS
+Architecture Pattern
+Controller
+↓
+Service
+↓
+Repository
+↓
+Database
+Benefits
+Separation of Concerns
+Testability
+Maintainability
+• 
+• 
+• 
+12
+13. Database Architecture
+Database
+PostgreSQL
+ORM
+Prisma
+Major Tables
+Users
+Stores:
+Profiles
+Preferences
+Activities
+Stores:
+Carbon Activities
+Carbon Records
+Stores:
+Calculated Emissions
+Recommendations
+Stores:
+Recommendation History
+• 
+• 
+• 
+• 
+• 
+13
+Goals
+Stores:
+Sustainability Goals
+14. Cache Architecture
+Technology
+Redis
+Cached Resources
+Dashboard Data
+Recommendation Results
+Frequently Accessed Queries
+Benefits
+Faster Response Time
+Reduced Database Load
+15. Security Architecture
+Helmet
+Purpose:
+Secure HTTP headers.
+• 
+• 
+• 
+14
+Rate Limiting
+Purpose:
+Prevent abuse.
+Input Validation
+Technology:
+Zod
+Authentication
+Technology:
+JWT
+Password Security
+Technology:
+bcrypt
+ORM Protection
+Technology:
+Prisma
+Benefits:
+SQL Injection Protection• 
+15
+16. Performance Architecture
+Database Indexing
+Indexes:
+user_id
+email
+created_at
+Pagination
+Applied to:
+Activities
+Recommendations
+Reports
+Lazy Loading
+Applied to:
+Charts
+Historical Data
+Analytics
+Caching
+Redis-based caching strategy.
+17. Testing Architecture
+Unit Testing
+Technology:
+• 
+• 
+• 
+• 
+• 
+• 
+16
+Jest
+Coverage:
+Carbon Engine
+Recommendation Engine
+Goal Logic
+Integration Testing
+Technology:
+Supertest
+Coverage:
+API Endpoints
+Database Integration
+End-to-End Testing
+Technology:
+Playwright
+User Flows:
+Registration
+Login
+Carbon Calculation
+Recommendations
+Goal Tracking
+Carbon Twin
+• 
+• 
+• 
+• 
+• 
+17
+18. Accessibility Architecture
+Compliance:
+WCAG 2.2 AA
+Features
+Keyboard Navigation
+Supported.
+Screen Readers
+Supported.
+Semantic HTML
+Implemented.
+ARIA Labels
+Implemented.
+Color Contrast
+Minimum:
+4.5:1
+19. Deployment Architecture
+Frontend
+18
+↓
+Next.js Application
+↓
+Backend API
+↓
+NestJS Services
+↓
+PostgreSQL
+↓
+Redis
+20. Scalability Strategy
+Future expansion supports:
+AI Carbon Coach
+Smart Home Integration
+Community Challenges
+Advanced Analytics
+Enterprise Sustainability Programs
+Without major architectural redesign.
+21. Requirement Traceability
+Understand
+Implemented By:
+Carbon Intelligence Engine
+Dashboard
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+19
+Track
+Implemented By:
+Analytics Engine
+Goal Tracking
+Reduce
+Implemented By:
+Recommendation Engine
+Carbon Twin Engine
+22. Success Criteria
+The architecture is successful when:
+✅ Users understand their emissions
+✅ Users can track progress
+✅ Users receive personalized recommendations
+✅ Carbon Twin simulations provide meaningful forecasts
+✅ Security best practices are enforced
+✅ Performance remains responsive
+✅ Code remains maintainable
+✅ System aligns completely with the challenge requirements
+• 
+• 
+• 
+• 
+20
+
+
+--- Testing Strategy v2.pdf ---
+Testing Strategy
+Project Name
+CarbonWise
+Version: 1.0
+Status: Approved
+Testing Stack:
+Jest
+Supertest
+Playwright
+1. Purpose
+This document defines the testing strategy for CarbonWise.
+The primary objective is to ensure:
+Reliability
+Maintainability
+Correctness
+Security
+Accessibility
+while supporting the challenge evaluation criteria.
+2. Testing Philosophy
+CarbonWise follows a testing pyramid approach.
+                E2E Tests
+                     ▲
+                     │
+            Integration Tests
+                     ▲
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+1
+                     │
+               Unit Tests
+Testing Priority
+Highest Priority
+Unit Tests
+Reason:
+Fast feedback and strong code quality.
+Medium Priority
+Integration Tests
+Reason:
+Validate service interactions.
+Lower Priority
+End-to-End Tests
+Reason:
+Validate complete user workflows.
+3. Testing Objectives
+The system must verify:
+Understand
+Users can calculate carbon footprints correctly.
+2
+Track
+Users can monitor progress accurately.
+Reduce
+Users receive correct recommendations.
+4. Test Coverage Goals
+Unit Tests
+Target Coverage:
+90%+
+Integration Tests
+Target Coverage:
+80%+
+E2E Tests
+Target Coverage:
+Critical User Flows
+Overall Target
+85%+
+3
+5. Unit Testing Strategy
+Framework
+Jest
+Purpose
+Validate business logic independently.
+Modules Covered
+Carbon Calculation Engine
+Tests:
+Emission Calculation
+Category Calculation
+Total Carbon Score
+Example
+describe('Carbon Calculator', ()=>{
+it('calculates car emissions correctly', ()=>{
+expect(
+calculateEmission(100, 0.192)
+).toBe(19.2);
+});
+});
+• 
+• 
+• 
+4
+Hotspot Detection Engine
+Tests:
+Largest Contributor Detection
+Percentage Calculation
+Example
+expect(
+detectHotspot(data)
+).toBe('TRANSPORTATION');
+Recommendation Engine
+Tests:
+Recommendation Ranking
+Priority Calculation
+User Preference Matching
+Goal Progress Engine
+Tests:
+Progress Percentage
+Milestone Detection
+Carbon Twin Engine
+Tests:
+Projection Calculations
+Scenario Comparisons
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+5
+6. Integration Testing Strategy
+Framework
+Supertest
+Purpose
+Verify communication between:
+Controllers
+Services
+Database
+Authentication Layer
+Areas Tested
+Authentication Flow
+Register
+↓
+Login
+↓
+JWT Generation
+↓
+Protected Route Access
+• 
+• 
+• 
+• 
+6
+Carbon Calculation Flow
+Submit Activity
+↓
+Carbon Service
+↓
+Database
+↓
+Response
+Recommendation Flow
+User Data
+↓
+Recommendation Engine
+↓
+Database
+↓
+API Response
+Goal Management Flow
+Create Goal
+↓
+Store Goal
+7
+↓
+Retrieve Goal
+↓
+Update Goal
+Example
+request(app)
+.post('/auth/login')
+.send({
+email,
+password
+})
+.expect(200);
+7. End-to-End Testing Strategy
+Framework
+Playwright
+Purpose
+Validate complete user experiences.
+Critical User Flows
+Flow 1
+User Registration
+8
+Landing Page
+↓
+Register
+↓
+Login
+↓
+Dashboard
+Expected Result:
+User reaches dashboard.
+Flow 2
+Carbon Calculation
+Dashboard
+↓
+Calculator
+↓
+Submit Data
+↓
+Receive Score
+Expected Result:
+Carbon score generated correctly.
+9
+Flow 3
+Recommendation Journey
+Dashboard
+↓
+Recommendations
+↓
+Accept Recommendation
+↓
+Create Goal
+Expected Result:
+Recommendation tracked successfully.
+Flow 4
+Carbon Twin Journey
+Dashboard
+↓
+Carbon Twin
+↓
+Scenario Creation
+↓
+Forecast Generation
+Expected Result:
+Simulation produced successfully.
+10
+Flow 5
+Goal Tracking
+Create Goal
+↓
+Track Progress
+↓
+Complete Goal
+Expected Result:
+Goal status updated.
+Example Playwright Test
+test('user login', async({page})=>{
+awaitpage.goto('/login');
+awaitpage.fill('#email', 'user@test.com');
+awaitpage.fill('#password', 'password');
+awaitpage.click('button[type=submit]');
+awaitexpect(page).toHaveURL('/dashboard');
+});
+11
+8. API Testing
+Objectives
+Validate:
+Request Validation
+Authentication
+Error Handling
+Response Structure
+APIs Covered
+Authentication APIs
+Register
+Login
+Refresh Token
+Carbon APIs
+Calculate
+Save Activity
+Recommendation APIs
+Generate
+Accept
+Complete
+Goal APIs
+Create
+Update
+Delete
+Carbon Twin APIs
+Simulate
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+12
+Retrieve History
+9. Database Testing
+Objectives
+Verify:
+Data Integrity
+Constraints
+Relationships
+Indexes
+Areas Tested
+User Data
+Verify:
+Unique Email
+Required Fields
+Activities
+Verify:
+Valid Relationships
+Correct Storage
+Goals
+Verify:
+Status Changes
+Progress Updates
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+13
+Recommendations
+Verify:
+Recommendation Tracking
+Recommendation Completion
+10. Security Testing
+Supports:
+Security (Medium Impact)
+Authentication Testing
+Verify:
+Invalid Credentials
+Expired Tokens
+Unauthorized Access
+Authorization Testing
+Verify:
+User Isolation
+Protected Endpoints
+Input Validation Testing
+Verify:
+Invalid Payloads
+Missing Fields
+Incorrect Types
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+14
+Injection Testing
+Verify:
+SQL Injection Resistance
+XSS Protection
+Example Payload:
+<script>alert(1)</script>
+Expected:
+Rejected
+Rate Limiting Testing
+Verify:
+100 Requests / Minute
+enforcement.
+Helmet Verification
+Verify security headers:
+X-Frame-Options
+Content-Security-Policy
+X-Content-Type-Options
+• 
+• 
+15
+11. Performance Testing
+Supports:
+Efficiency (Medium Impact)
+Carbon Calculator
+Target:
+<100 ms
+Recommendation Engine
+Target:
+<500 ms
+Dashboard Load
+Target:
+<2 seconds
+API Response Time
+Target:
+<500 ms
+16
+Load Testing
+Concurrent Users:
+1000
+Stress Testing
+Concurrent Users:
+5000
+12. Accessibility Testing
+Supports:
+Accessibility (Low Impact)
+Standard
+WCAG 2.2 AA
+Automated Accessibility Testing
+Tools:
+Playwright
+axe-core
+17
+Manual Accessibility Testing
+Verify:
+Keyboard Navigation
+Focus States
+Screen Reader Support
+Areas Covered
+Forms
+Verify:
+Labels
+Error Messages
+Focus Handling
+Dashboard
+Verify:
+Charts
+Buttons
+Navigation
+Calculator
+Verify:
+Inputs
+Validation Messages
+13. Cross-Browser Testing
+Browsers:
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+18
+Chrome
+Firefox
+Edge
+Safari
+14. Mobile Testing
+Devices:
+Android
+iOS
+Verify:
+Responsive Layout
+Navigation
+Touch Targets
+15. CI/CD Testing Pipeline
+Every pull request triggers:
+Code Push
+↓
+ESLint
+↓
+Type Check
+↓
+• 
+• 
+• 
+19
+Unit Tests
+↓
+Integration Tests
+↓
+Build
+↓
+Playwright E2E
+↓
+Deployment
+16. Regression Testing
+Executed on:
+New Features
+Bug Fixes
+Releases
+Purpose:
+Ensure existing functionality remains stable.
+17. Test Data Strategy
+Separate environments:
+Development
+Testing
+Production
+• 
+• 
+• 
+20
+Production data must never be used in tests.
+Mocking Strategy
+Mock:
+External APIs
+Carbon Factor Sources
+Authentication Services
+Do Not Mock:
+Core Business Logic
+Recommendation Algorithms
+Carbon Calculations
+18. Failure Scenarios
+The system must handle:
+Database Failure
+Expected:
+Graceful Error Response
+Redis Failure
+Expected:
+Fallback to Database
+• 
+• 
+• 
+• 
+• 
+• 
+21
+Invalid User Input
+Expected:
+Validation Error
+Expired Token
+Expected:
+401 Unauthorized
+19. Release Readiness Criteria
+A release is approved only when:
+✅ Unit Tests Pass
+✅ Integration Tests Pass
+✅ Playwright Tests Pass
+✅ Security Tests Pass
+✅ Accessibility Checks Pass
+✅ Performance Targets Met
+✅ No Critical Bugs Remain
+20. Success Criteria
+The testing strategy is successful when:
+✅ Carbon calculations remain accurate
+✅ Recommendations remain reliable
+22
+✅ Carbon Twin forecasts behave correctly
+✅ Security vulnerabilities are minimized
+✅ Accessibility requirements are satisfied
+✅ Performance remains within targets
+✅ Future features can be added confidently
+✅ The platform remains maintainable over time
+23
+
+
+--- User Stories and Acceptance Criteria.pdf ---
+User Stories and Acceptance Criteria
+Project Name
+CarbonWise
+Version: 1.0
+Status: Approved
+1. Purpose
+This document defines the functional requirements of CarbonWise from the user's perspective.
+It ensures every feature directly supports the challenge statement:
+Design a solution that helps individuals understand, track, and reduce their carbon footprint
+through simple actions and personalized insights.
+The document is also used by:
+Developers
+QA Engineers
+Judges
+Future Contributors
+to verify that the system fulfills its intended purpose.
+2. User Personas
+Persona 1 — Student
+Name: Rahul
+Age: 20
+Characteristics:
+Budget conscious
+• 
+• 
+• 
+• 
+• 
+1
+Technology friendly
+Interested in sustainability
+Goals:
+Understand environmental impact
+Learn sustainable habits
+Persona 2 — Working Professional
+Name: Priya
+Age: 29
+Characteristics:
+Limited free time
+Data-driven decision maker
+Goals:
+Reduce emissions efficiently
+Receive personalized advice
+Persona 3 — Sustainability Enthusiast
+Name: Arjun
+Age: 32
+Characteristics:
+Highly motivated
+Tracks environmental impact
+Goals:
+Optimize lifestyle choices
+Measure long-term improvements
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+2
+3. Epic 1 — Authentication
+Supports:
+Secure Access
+Code Quality
+Security
+User Story 1.1
+As a new user ,
+I want to create an account,
+So that I can access CarbonWise.
+Acceptance Criteria
+Given:
+User is on registration page
+When:
+Valid information is entered
+Then:
+Account is created successfully
+And:
+User can log in immediately
+3
+User Story 1.2
+As a registered user ,
+I want to securely log in,
+So that I can access my sustainability dashboard.
+Acceptance Criteria
+Given:
+Valid credentials
+When:
+Login is attempted
+Then:
+JWT token is issued
+And:
+Dashboard loads successfully
+User Story 1.3
+As a user ,
+I want invalid login attempts rejected,
+So that my account remains secure.
+Acceptance Criteria
+Given:
+4
+Incorrect password
+When:
+Login is attempted
+Then:
+Access denied
+And:
+Error message displayed
+4. Epic 2 — Carbon Understanding
+Supports:
+Understand
+from the challenge statement.
+User Story 2.1
+As a user ,
+I want to calculate my carbon footprint,
+So that I understand my environmental impact.
+Acceptance Criteria
+Given:
+5
+Transportation
+Food
+Energy
+Shopping
+data is entered.
+When:
+Calculation is submitted
+Then:
+Carbon score generated
+And:
+Emission breakdown displayed
+User Story 2.2
+As a user ,
+I want to identify my largest emission source,
+So that I know where improvements matter most.
+Acceptance Criteria
+Given:
+Multiple activity categories
+When:
+6
+Score calculation completes
+Then:
+Highest emission category highlighted
+User Story 2.3
+As a user ,
+I want a sustainability rating,
+So that I can quickly understand my performance.
+Acceptance Criteria
+Ratings available:
+Eco Champion
+Sustainable
+Improving
+High Impact
+Critical
+5. Epic 3 — Progress Tracking
+Supports:
+Track
+from the challenge statement.
+7
+User Story 3.1
+As a user ,
+I want to see my carbon history,
+So that I can measure progress.
+Acceptance Criteria
+Dashboard displays:
+Monthly Trends
+Historical Emissions
+Carbon Score Changes
+User Story 3.2
+As a user ,
+I want activity history,
+So that I can review previous entries.
+Acceptance Criteria
+User can:
+Search Activities
+Filter Activities
+View Activity Details
+User Story 3.3
+As a user ,
+I want weekly and monthly summaries,
+So that I can understand trends.
+• 
+• 
+• 
+• 
+• 
+• 
+8
+Acceptance Criteria
+Reports include:
+Total Emissions
+Category Breakdown
+Improvement Metrics
+6. Epic 4 — Personalized Recommendations
+Supports:
+Reduce
+from the challenge statement.
+User Story 4.1
+As a user ,
+I want personalized recommendations,
+So that I can reduce emissions effectively.
+Acceptance Criteria
+Recommendations generated using:
+Emission Hotspots
+User Preferences
+Historical Activities
+Example
+Transportation-heavy user receives:
+Use Public Transport
+• 
+• 
+• 
+• 
+• 
+• 
+9
+Food-heavy user receives:
+Reduce Meat Consumption
+User Story 4.2
+As a user ,
+I want recommendations ranked by impact,
+So that I know which action matters most.
+Acceptance Criteria
+Each recommendation displays:
+Priority
+Estimated Savings
+Difficulty Level
+User Story 4.3
+As a user ,
+I want recommendations tracked,
+So that I can measure behavior change.
+Acceptance Criteria
+System records:
+Accepted Recommendations
+Completed Recommendations
+Adoption Rate
+• 
+• 
+• 
+• 
+• 
+• 
+10
+7. Epic 5 — Sustainability Goals
+Supports:
+Track
+Reduce
+User Story 5.1
+As a user ,
+I want to create sustainability goals,
+So that I can reduce emissions over time.
+Acceptance Criteria
+User can:
+Create Goal
+Edit Goal
+Delete Goal
+User Story 5.2
+As a user ,
+I want progress tracking,
+So that I know how close I am to my target.
+Acceptance Criteria
+System displays:
+Completion Percentage
+Milestones
+Remaining Reduction
+• 
+• 
+• 
+• 
+• 
+• 
+11
+User Story 5.3
+As a user ,
+I want milestone notifications,
+So that I stay motivated.
+Acceptance Criteria
+Notifications sent at:
+25%
+50%
+75%
+100%
+completion.
+8. Epic 6 — Carbon Twin
+Supports:
+Personalized Insights
+User Story 6.1
+As a user ,
+I want to simulate future scenarios,
+So that I understand potential outcomes before making changes.
+12
+Acceptance Criteria
+User can modify:
+Transportation
+Food
+Energy
+variables.
+Example
+Reduce Car Usage
+Output:
+Projected Emissions
+Potential Savings
+User Story 6.2
+As a user ,
+I want future carbon forecasts,
+So that I can make informed decisions.
+Acceptance Criteria
+Forecast includes:
+Current Emissions
+Predicted Emissions
+Reduction Percentage
+• 
+• 
+• 
+• 
+• 
+• 
+13
+9. Epic 7 — Accessibility
+Supports:
+Accessibility (Low Impact)
+User Story 7.1
+As a keyboard-only user ,
+I want complete keyboard navigation,
+So that I can use all features.
+Acceptance Criteria
+All pages support:
+Tab Navigation
+Enter Key
+Escape Key
+User Story 7.2
+As a screen reader user ,
+I want meaningful labels,
+So that I can understand content.
+Acceptance Criteria
+All forms include:
+Labels
+ARIA Attributes
+Error Announcements
+• 
+• 
+• 
+• 
+• 
+• 
+14
+User Story 7.3
+As a low-vision user ,
+I want sufficient color contrast,
+So that content remains readable.
+Acceptance Criteria
+Minimum contrast:
+4.5:1
+10. Epic 8 — Security
+Supports:
+Security (Medium Impact)
+User Story 8.1
+As a user ,
+I want my account protected,
+So that unauthorized users cannot access my data.
+Acceptance Criteria
+System uses:
+JWT Authentication
+bcrypt Password Hashing
+Rate Limiting
+• 
+• 
+• 
+15
+User Story 8.2
+As a user ,
+I want secure data submission,
+So that malicious input is rejected.
+Acceptance Criteria
+Input validation implemented using:
+Zod
+Invalid Requests
+Must return:
+400 Bad Request
+User Story 8.3
+As an administrator ,
+I want common attacks prevented,
+So that the platform remains secure.
+Acceptance Criteria
+Security protections include:
+Helmet
+Input Validation
+Authorization Checks
+Secure Headers
+• 
+• 
+• 
+• 
+16
+11. Epic 9 — Performance
+Supports:
+Efficiency (Medium Impact)
+User Story 9.1
+As a user ,
+I want fast dashboard loading,
+So that the platform feels responsive.
+Acceptance Criteria
+Dashboard loads:
+< 2 Seconds
+User Story 9.2
+As a user ,
+I want quick recommendations,
+So that insights feel immediate.
+Acceptance Criteria
+Recommendation generation:
+< 500ms
+17
+User Story 9.3
+As a user ,
+I want fast carbon calculations,
+So that I receive results instantly.
+Acceptance Criteria
+Calculation time:
+< 100ms
+12. Epic 10 — Testing and Reliability
+Supports:
+Testing (Low Impact)
+User Story 10.1
+As a developer ,
+I want unit tests,
+So that business logic remains reliable.
+Acceptance Criteria
+Coverage:
+90%+
+for core engines.
+18
+User Story 10.2
+As a developer ,
+I want integration tests,
+So that modules interact correctly.
+Acceptance Criteria
+Coverage:
+80%+
+for API flows.
+User Story 10.3
+As a developer ,
+I want end-to-end tests,
+So that critical user journeys remain functional.
+Acceptance Criteria
+Playwright tests cover:
+Registration
+Login
+Calculator
+Recommendations
+Goals
+Carbon Twin
+13. Final Acceptance Criteria
+CarbonWise is accepted as complete when:
+• 
+• 
+• 
+• 
+• 
+• 
+19
+✅ Users can understand their carbon footprint
+✅ Users can track sustainability progress
+✅ Users receive personalized recommendations
+✅ Carbon Twin simulations function correctly
+✅ Security protections are implemented
+✅ Performance targets are achieved
+✅ Accessibility requirements are satisfied
+✅ Testing requirements are satisfied
+✅ Documentation is complete
+✅ Repository follows challenge guidelines
+14. Business Success Criteria
+The project is considered successful when:
+✅ Users identify their emission hotspots
+✅ Users adopt recommendations
+✅ Users reduce emissions over time
+✅ Sustainability awareness increases
+✅ Carbon footprint tracking becomes habitual
+✅ Personalized insights drive behavior change
+✅ The platform clearly fulfills the challenge statement
+20
+
+

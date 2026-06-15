@@ -1,0 +1,149 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String             @id @default(uuid())
+  fullName        String
+  email           String             @unique
+  passwordHash    String
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  preferences     UserPreference?
+  activities      Activity[]
+  carbonRecords   CarbonRecord[]
+  recommendations Recommendation[]
+  goals           Goal[]
+}
+
+model UserPreference {
+  id                  String @id @default(uuid())
+  userId              String @unique
+  dietType            String
+  transportationType  String
+  sustainabilityGoal  String
+  user                User   @relation(fields: [userId], references: [id])
+}
+
+enum ActivityCategory {
+  TRANSPORTATION
+  FOOD
+  ENERGY
+  SHOPPING
+}
+
+model Activity {
+  id           String           @id @default(uuid())
+  userId       String
+  category     ActivityCategory
+  activityName String
+  quantity     Float
+  unit         String
+  activityDate DateTime
+  createdAt    DateTime         @default(now())
+  user         User             @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model CarbonRecord {
+  id            String           @id @default(uuid())
+  userId        String
+  activityId    String?
+  category      ActivityCategory
+  emissionValue Float
+  emissionUnit  String
+  createdAt     DateTime         @default(now())
+  user          User             @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+enum RecommendationPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model Recommendation {
+  id               String                 @id @default(uuid())
+  userId           String
+  title            String
+  description      String
+  priority         RecommendationPriority
+  estimatedSavings Float
+  accepted         Boolean                @default(false)
+  createdAt        DateTime               @default(now())
+  user             User                   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model RecommendationAction {
+  id               String    @id @default(uuid())
+  recommendationId String
+  actionTaken      Boolean
+  completedAt      DateTime?
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+}
+
+model Goal {
+  id              String     @id @default(uuid())
+  userId          String
+  title           String
+  targetReduction Float
+  currentProgress Float
+  targetDate      DateTime
+  status          GoalStatus
+  createdAt       DateTime   @default(now())
+  user            User       @relation(fields: [userId], references: [id])
+}
+
+model GoalMilestone {
+  id               String  @id @default(uuid())
+  goalId           String
+  title            String
+  targetPercentage Int
+  completed        Boolean
+}
+
+model CarbonTwinScenario {
+  id                String   @id @default(uuid())
+  userId            String
+  scenarioName      String
+  currentEmission   Float
+  projectedEmission Float
+  potentialSavings  Float
+  createdAt         DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model EmissionFactor {
+  id       String @id @default(uuid())
+  category String
+  itemName String
+  factor   Float
+  unit     String
+  source   String
+}
