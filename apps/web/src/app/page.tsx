@@ -3,6 +3,7 @@ import { CarbonScoreCard } from '../components/CarbonScoreCard';
 import { HotspotCard } from '../components/HotspotCard';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { CarbonTwinCard } from '../components/CarbonTwinCard';
+import { EmissionHistory } from '../components/EmissionHistory';
 
 export default function Dashboard() {
   return (
@@ -39,6 +40,11 @@ export default function Dashboard() {
             breakdown={{ TRANSPORTATION: 99, FOOD: 36, ENERGY: 27, SHOPPING: 18 }}
             hotspot="TRANSPORTATION"
           />
+        </section>
+
+        {/* Middle Row — History Chart */}
+        <section aria-label="Historical trends" className="mt-6">
+          <EmissionHistory />
         </section>
 
         {/* Bottom Row — Recommendation + Carbon Twin */}

@@ -6,6 +6,8 @@
     "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r run build",
     "build:static": "pnpm -F web build",
+    "test": "pnpm -r test",
+    "test:e2e": "playwright test",
     "lint": "pnpm -r run lint"
   }
 }

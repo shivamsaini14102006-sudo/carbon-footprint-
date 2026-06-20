@@ -60,7 +60,10 @@ export function CarbonScoreCard({
             strokeLinecap="round"
           />
         </svg>
-        <div className="absolute text-5xl font-heading font-black text-foreground" aria-hidden="true">
+        <div 
+          className="absolute text-5xl font-heading font-black text-foreground" 
+          aria-live="polite"
+        >
           {score}
         </div>
       </div>
@@ -81,7 +84,7 @@ export function CarbonScoreCard({
           </svg>
           {Math.abs(trend)}% from last month
         </span>
-        <p className="text-xs text-muted-foreground mt-2">
+        <p className="text-xs text-muted-foreground mt-2" aria-live="polite">
           Total: {totalEmission} kg CO₂e
         </p>
       </div>
