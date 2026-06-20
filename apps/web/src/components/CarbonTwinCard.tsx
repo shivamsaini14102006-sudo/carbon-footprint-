@@ -1,20 +1,22 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import type { CarbonTwinScenario } from '@carbonwise/types';
 
+const SCENARIOS: CarbonTwinScenario[] = [
+  { scenarioName: 'Public Transport', currentEmission: 250, projectedEmission: 180, potentialSavings: 70 },
+  { scenarioName: 'Vegetarian Diet', currentEmission: 250, projectedEmission: 195, potentialSavings: 55 },
+  { scenarioName: 'Combined Plan', currentEmission: 250, projectedEmission: 130, potentialSavings: 120 },
+];
+
 interface CarbonTwinCardProps {
-  scenario?: CarbonTwinScenario;
+  scenarios?: CarbonTwinScenario[];
   isLoading?: boolean;
 }
 
-const DEFAULT_SCENARIO: CarbonTwinScenario = {
-  scenarioName: 'Default',
-  currentEmission: 250,
-  projectedEmission: 180,
-  potentialSavings: 70,
-};
+export function CarbonTwinCard({ scenarios = SCENARIOS, isLoading = false }: CarbonTwinCardProps) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const scenario = scenarios[activeIdx];
 
-export function CarbonTwinCard({ scenario = DEFAULT_SCENARIO, isLoading = false }: CarbonTwinCardProps) {
   if (isLoading) {
     return (
       <div role="status" aria-label="Loading carbon twin forecast" className="glass rounded-[2rem] p-8 animate-pulse">
@@ -42,16 +44,41 @@ export function CarbonTwinCard({ scenario = DEFAULT_SCENARIO, isLoading = false 
             Carbon Twin Forecast
           </h3>
         </div>
+
+        {/* Scenario Selector Tabs */}
+        <div role="tablist" aria-label="Select a lifestyle scenario" className="flex gap-2 mb-6 flex-wrap">
+          {scenarios.map((s, idx) => (
+            <button
+              key={s.scenarioName}
+              role="tab"
+              id={`twin-tab-${idx}`}
+              aria-selected={activeIdx === idx}
+              aria-controls="twin-panel"
+              onClick={() => setActiveIdx(idx)}
+              className={`px-4 py-2 text-xs font-bold rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+                activeIdx === idx
+                  ? 'bg-primary text-white shadow-lg'
+                  : 'bg-white/5 text-muted-foreground hover:bg-white/10'
+              }`}
+            >
+              {s.scenarioName}
+            </button>
+          ))}
+        </div>
+
         <p className="text-muted-foreground leading-relaxed">
-          Based on your current habits, achieving your transportation goal could reduce emissions by{' '}
-          <strong className="text-primary">{savingsPct}%</strong> by year&#39;s end.
+          Switching to <strong className="text-primary">{scenario.scenarioName}</strong> could reduce your emissions by{' '}
+          <strong className="text-primary">{savingsPct}%</strong> — saving{' '}
+          <strong className="text-green-400">{scenario.potentialSavings} kg CO₂</strong> per year.
         </p>
       </div>
 
+      {/* Comparison Panel */}
       <div
+        id="twin-panel"
+        role="tabpanel"
+        aria-labelledby={`twin-tab-${activeIdx}`}
         className="mt-8 flex justify-between items-center bg-black/40 rounded-2xl p-6 relative z-10"
-        role="region"
-        aria-label="Carbon emission forecast comparison"
       >
         <div className="text-center">
           <p className="text-sm text-muted-foreground">Current</p>

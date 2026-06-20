@@ -4,6 +4,9 @@ import { HotspotCard } from '../components/HotspotCard';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { CarbonTwinCard } from '../components/CarbonTwinCard';
 import { EmissionHistory } from '../components/EmissionHistory';
+import { SavingsTracker } from '../components/SavingsTracker';
+import { HabitStreak } from '../components/HabitStreak';
+import { GoalCard } from '../components/GoalCard';
 
 export default function Dashboard() {
   return (
@@ -33,7 +36,8 @@ export default function Dashboard() {
 
       {/* Main Dashboard Content */}
       <main id="main-content">
-        {/* Top Row — Score + Hotspots */}
+
+        {/* Row 1 — Score + Hotspots */}
         <section aria-label="Carbon overview" className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <CarbonScoreCard score={68} totalEmission={180} trend={8} />
           <HotspotCard
@@ -42,12 +46,22 @@ export default function Dashboard() {
           />
         </section>
 
-        {/* Middle Row — History Chart */}
+        {/* Row 2 — Savings + Streaks */}
+        <section aria-label="Sustainability progress" className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <SavingsTracker totalSaved={120} annualGoal={500} equivalentTrees={6} />
+          <HabitStreak
+            streakDays={7}
+            habitName="Sustainable Transport"
+            weekStatus={[true, true, true, true, true, true, true]}
+          />
+        </section>
+
+        {/* Row 3 — History Chart */}
         <section aria-label="Historical trends" className="mt-6">
           <EmissionHistory />
         </section>
 
-        {/* Bottom Row — Recommendation + Carbon Twin */}
+        {/* Row 4 — Recommendation + Carbon Twin */}
         <section aria-label="Insights and forecasts" className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           <RecommendationCard
             recommendation={{
@@ -60,12 +74,21 @@ export default function Dashboard() {
               estimatedSavings: 120,
             }}
           />
-          <CarbonTwinCard
-            scenario={{
-              scenarioName: 'Transport Goal',
-              currentEmission: 250,
-              projectedEmission: 180,
-              potentialSavings: 70,
+          <CarbonTwinCard />
+        </section>
+
+        {/* Row 5 — Goals */}
+        <section aria-label="Sustainability goals" className="mt-6">
+          <GoalCard
+            goal={{
+              id: 'g1',
+              userId: 'u1',
+              title: 'Reduce Transportation Emissions by 20%',
+              targetReduction: 20,
+              currentProgress: 65,
+              targetDate: '2026-12-31',
+              status: 'ACTIVE',
+              createdAt: '2026-01-01',
             }}
           />
         </section>

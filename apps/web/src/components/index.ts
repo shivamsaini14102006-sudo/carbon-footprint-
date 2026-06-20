@@ -1,6 +1,9 @@
-// Barrel export for all UI components
 export { CarbonScoreCard } from './CarbonScoreCard';
 export { HotspotCard } from './HotspotCard';
 export { RecommendationCard } from './RecommendationCard';
-export { GoalCard } from './GoalCard';
 export { CarbonTwinCard } from './CarbonTwinCard';
+export { GoalCard } from './GoalCard';
+export { EmissionHistory } from './EmissionHistory';
+export { SavingsTracker } from './SavingsTracker';
+export { HabitStreak } from './HabitStreak';
+export { ErrorBoundary } from './ErrorBoundary';
