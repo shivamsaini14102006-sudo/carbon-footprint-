@@ -243,6 +243,9 @@ Redis Cache
 ## Authentication
 
 - JWT
+(Access Token
+Refresh Token
+Refresh Token Rotation)
 - bcrypt
 
 ## Security

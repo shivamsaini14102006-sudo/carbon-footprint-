@@ -10,6 +10,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@carbonwise/types':
+        specifier: workspace:^
+        version: link:../../packages/types
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.26(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -34,6 +37,9 @@ importers:
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
+      cookie-parser:
+        specifier: ^1.4.7
+        version: 1.4.7
       helmet:
         specifier: ^8.2.0
         version: 8.2.0
@@ -71,6 +77,9 @@ importers:
       '@nestjs/testing':
         specifier: ^11.0.1
         version: 11.1.26(@nestjs/common@11.1.26)(@nestjs/core@11.1.26)(@nestjs/platform-express@11.1.26)
+      '@types/cookie-parser':
+        specifier: ^1.4.10
+        version: 1.4.10(@types/express@5.0.6)
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.6
@@ -98,6 +107,9 @@ importers:
       jest:
         specifier: ^30.0.0
         version: 30.4.2(@types/node@24.13.2)(ts-node@10.9.2)
+      jest-mock-extended:
+        specifier: ^4.0.1
+        version: 4.0.1(@jest/globals@30.4.1)(jest@30.4.2)(typescript@5.9.3)
       prettier:
         specifier: ^3.4.2
         version: 3.8.4
@@ -131,6 +143,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@carbonwise/types':
+        specifier: workspace:^
+        version: link:../../packages/types
       next:
         specifier: 15.5.19
         version: 15.5.19(react-dom@19.1.0)(react@19.1.0)
@@ -140,6 +155,9 @@ importers:
       react-dom:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
+      zustand:
+        specifier: ^5.0.14
+        version: 5.0.14(@types/react@19.2.17)(react@19.1.0)
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3
@@ -2393,6 +2411,14 @@ packages:
       '@types/node': 24.13.2
     dev: true
 
+  /@types/cookie-parser@1.4.10(@types/express@5.0.6):
+    resolution: {integrity: sha512-B4xqkqfZ8Wek+rCOeRxsjMS9OgvzebEzzLYw7NHYuvzb7IdxOkI0ZHGgeEBX4PUM7QGVvNSK60T3OvWj3YfBRg==}
+    peerDependencies:
+      '@types/express': '*'
+    dependencies:
+      '@types/express': 5.0.6
+    dev: true
+
   /@types/cookiejar@2.1.5:
     resolution: {integrity: sha512-he+DHOWReW0nghN24E1WUqM0efK4kI9oTqDm6XmK8ZPe2djZ90BSNdGnIyCLzCPw7/pogPlGbzI2wHGGmi4O/Q==}
     dev: true
@@ -3773,6 +3799,18 @@ packages:
   /convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
     dev: true
+
+  /cookie-parser@1.4.7:
+    resolution: {integrity: sha512-nGUvgXnotP3BsjiLX2ypbQnWoGUPIIfHQNZkkC668ntrzGWEZVW70HDEB1qnNGMicPje6EttlIgzo51YSwNQGw==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      cookie: 0.7.2
+      cookie-signature: 1.0.6
+    dev: false
+
+  /cookie-signature@1.0.6:
+    resolution: {integrity: sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ==}
+    dev: false
 
   /cookie-signature@1.2.2:
     resolution: {integrity: sha512-D76uU73ulSXrD1UXF4KE2TMxVVwhsnCgfAyTg9k8P6KGZjlXKrOLe4dJQKI3Bxi5wjesZoFXJWElNWBjPZMbhg==}
@@ -5697,6 +5735,20 @@ packages:
       stack-utils: 2.0.6
     dev: true
 
+  /jest-mock-extended@4.0.1(@jest/globals@30.4.1)(jest@30.4.2)(typescript@5.9.3):
+    resolution: {integrity: sha512-Q/4k/yefiv/Al3n755V9xDEwMiL+7LwkjRKjaORkgCdovZv00hF/D0QypLoqO+MVfrYkzCYa4BYlcEKA74iOgQ==}
+    peerDependencies:
+      '@jest/globals': ^28.0.0 || ^29.0.0 || ^30.0.0
+      jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0 || ^29.0.0 || ^30.0.0
+      typescript: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
+    dependencies:
+      '@jest/globals': 30.4.1
+      jest: 30.4.2(@types/node@24.13.2)(ts-node@10.9.2)
+      lodash.isequal: 4.5.0
+      ts-essentials: 10.2.1(typescript@5.9.3)
+      typescript: 5.9.3
+    dev: true
+
   /jest-mock@30.4.1:
     resolution: {integrity: sha512-/i8SVb8/NSB7RfNi8gfqu8gxLV23KaL5EpAttyb9iz8qWRIqXRLflycz/32wXsYkOnaUlx8NAKnJYtpsmXUmfw==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -6221,6 +6273,11 @@ packages:
   /lodash.isboolean@3.0.3:
     resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==}
     dev: false
+
+  /lodash.isequal@4.5.0:
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+    dev: true
 
   /lodash.isinteger@4.0.4:
     resolution: {integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==}
@@ -8028,6 +8085,17 @@ packages:
       typescript: 5.9.3
     dev: true
 
+  /ts-essentials@10.2.1(typescript@5.9.3):
+    resolution: {integrity: sha512-+Id1fRkuir+CsgK2x04/icS2b4V1hQmq7ObzIrDjhN0ozfRYivnP7aaKMVJfLApQm0trjR39A6NIMVchiB9Erw==}
+    peerDependencies:
+      typescript: '>=4.5.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      typescript: 5.9.3
+    dev: true
+
   /ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: false
@@ -8671,4 +8739,26 @@ packages:
 
   /zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+    dev: false
+
+  /zustand@5.0.14(@types/react@19.2.17)(react@19.1.0):
+    resolution: {integrity: sha512-/8tAspM5LMPr28b3fwLYrtdj77ECpfZviaP75CMTnwO8ISyaE4GDIG/9rDDYq/cH9D2Xw2A2RXglLInmVBQB/g==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
+    dependencies:
+      '@types/react': 19.2.17
+      react: 19.1.0
     dev: false

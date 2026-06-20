@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { CarbonModule } from './carbon/carbon.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
     CarbonModule,
     ActivitiesModule,
     RecommendationsModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

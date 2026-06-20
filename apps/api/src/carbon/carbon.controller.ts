@@ -12,9 +12,9 @@ export class CarbonController {
   constructor(private readonly carbonService: CarbonService) {}
 
   @Post('calculate')
-  async calculate(@Body() calculateCarbonDto: CalculateCarbonDto, @Request() req) {
-    const result = this.carbonService.calculateEmissions(calculateCarbonDto);
-    // Ideally map and save records using ActivitiesService using req.user.sub
+  async calculate(@Body() calculateCarbonDto: CalculateCarbonDto, @Request() req: any) {
+    const userId = req.user.sub;
+    const result = await this.carbonService.calculateEmissions(calculateCarbonDto, userId);
     return {
       success: true,
       data: result,

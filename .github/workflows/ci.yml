@@ -1,0 +1,47 @@
+name: CarbonWise CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-type-check:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -F web build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
+
+  api-unit-tests:
+    name: API Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -F api test --coverage
+        env:
+          JWT_SECRET: test-secret-key
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: apps/api/coverage/

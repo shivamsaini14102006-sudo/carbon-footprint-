@@ -18,7 +18,7 @@ export class CarbonService {
     clothing: 15.0, // kg CO2e per item
   };
 
-  calculateEmissions(data: CalculateCarbonDto) {
+  async calculateEmissions(data: CalculateCarbonDto, userId: string) {
     const t = data.transportation;
     const transportationEmissions = 
       (t.carKm * this.FACTORS.car) +
@@ -61,6 +61,16 @@ export class CarbonService {
         hotspot = key;
       }
     }
+
+    // Persist into database
+    await this.prisma.carbonRecord.createMany({
+      data: [
+        { userId, category: 'TRANSPORTATION', emissionValue: transportationEmissions, emissionUnit: 'kgCO2e' },
+        { userId, category: 'FOOD', emissionValue: foodEmissions, emissionUnit: 'kgCO2e' },
+        { userId, category: 'ENERGY', emissionValue: energyEmissions, emissionUnit: 'kgCO2e' },
+        { userId, category: 'SHOPPING', emissionValue: shoppingEmissions, emissionUnit: 'kgCO2e' },
+      ],
+    });
 
     return {
       carbonScore,
