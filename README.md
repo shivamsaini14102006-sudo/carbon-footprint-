@@ -4,188 +4,236 @@
 
 ---
 
-## 📖 Overview
-
-CarbonWise is an intelligent sustainability platform designed to help people make environmentally conscious decisions through data-driven insights, personalized recommendations, and predictive sustainability forecasting.
-
-Most carbon footprint calculators simply show emissions.
-
-CarbonWise goes beyond measurement by helping users:
-
-- Understand where emissions originate
-- Track sustainability progress over time
-- Identify carbon hotspots
-- Receive personalized recommendations
-- Simulate future environmental outcomes before making lifestyle changes
-
-The platform acts as a personal sustainability coach focused on long-term behavior change rather than one-time calculations.
-
----
-
-## 🎯 Problem Statement
+# 🎯 Problem Statement
 
 Design a solution that helps individuals understand, track, and reduce their carbon footprint through simple actions and personalized insights.
 
-CarbonWise directly addresses all three objectives:
+CarbonWise was built specifically to solve this challenge by turning sustainability data into actionable behavior change.
 
-### Understand
+Unlike traditional carbon calculators that only display emissions, CarbonWise helps users:
 
-Users gain visibility into:
+✅ Understand where their emissions come from
 
-- Carbon Score
-- Sustainability Rating
-- Emission Breakdown
-- Carbon Hotspots
+✅ Track progress over time
 
-### Track
+✅ Receive personalized recommendations
 
-Users can monitor:
+✅ Simulate future environmental impact
 
-- Daily Activities
-- Historical Trends
-- Goal Progress
-- Sustainability Reports
-
-### Reduce
-
-Users receive:
-
-- Personalized Recommendations
-- Action Plans
-- Carbon Twin Simulations
-- Predicted Savings
+✅ Build sustainable habits
 
 ---
 
-# 🚀 Key Features
+# 🌱 Why CarbonWise?
+
+Most carbon footprint tools stop after showing a number.
+
+CarbonWise focuses on helping people take action.
+
+The platform follows a three-stage sustainability journey:
+
+## 1. Understand
+
+Users discover:
+
+* Carbon Score
+* Sustainability Rating
+* Emission Breakdown
+* Carbon Hotspots
+
+## 2. Track
+
+Users monitor:
+
+* Daily Activities
+* Historical Trends
+* Carbon Savings
+* Goal Progress
+* Sustainability Streaks
+
+## 3. Reduce
+
+Users receive:
+
+* Personalized Recommendations
+* Estimated Carbon Savings
+* Carbon Twin Forecasts
+* Sustainability Action Plans
+
+---
+
+# 🚀 Core Features
 
 ## 📊 Carbon Intelligence Engine
 
-Calculates emissions across multiple categories:
+Calculates emissions across major lifestyle categories:
 
 ### Transportation
 
-- Car Travel
-- Bus Travel
-- Train Travel
-- Flights
-- Bike Usage
+* Car Travel
+* Public Transport
+* Flights
+* Train Travel
+* Bike Usage
 
 ### Food
 
-- Meat Consumption
-- Dairy Consumption
-- Vegetarian Meals
-- Vegan Meals
+* Meat Consumption
+* Dairy Consumption
+* Vegetarian Meals
+* Vegan Meals
 
 ### Energy
 
-- Electricity Usage
-- Heating
-- Cooling
+* Electricity Usage
+* Heating
+* Cooling
 
 ### Shopping
 
-- Clothing
-- Electronics
-- Household Purchases
+* Clothing
+* Electronics
+* Household Purchases
 
-The engine converts user activities into measurable carbon emissions and generates a sustainability score.
+The engine converts everyday activities into measurable carbon emissions and generates an overall Carbon Score.
+
+---
+
+## 🔥 Carbon Hotspot Detection
+
+CarbonWise automatically identifies the user's largest emission sources.
+
+Example:
+
+```text
+Transportation: 55%
+
+Food: 20%
+
+Energy: 15%
+
+Shopping: 10%
+```
+
+This helps users focus on the highest-impact opportunities first.
 
 ---
 
 ## 📈 Sustainability Dashboard
 
-Provides users with:
+The dashboard provides:
 
-- Carbon Score
-- Sustainability Rating
-- Monthly Emissions
-- Historical Trends
-- Emission Breakdown
-- Goal Progress
+* Carbon Score
+* Sustainability Rating
+* Monthly Emissions
+* Emission Trends
+* Goal Progress
+* Carbon Savings
 
-Designed to help users quickly understand their environmental impact.
+Users can instantly understand their current environmental impact.
 
 ---
 
 ## 🎯 Personalized Recommendation Engine
 
-The recommendation engine analyzes:
+Recommendations are generated using:
 
-- Emission Hotspots
-- User Preferences
-- Historical Activities
-- Sustainability Goals
+* Emission Hotspots
+* User Preferences
+* Historical Activities
+* Sustainability Goals
 
 Example:
 
-Transportation-heavy users may receive:
-
 ```text
-Use public transport twice per week
+Recommendation:
+Replace two weekly car trips with public transport
+
+Estimated Annual Savings:
+120 kg CO₂
 ```
 
-Estimated impact:
+Every recommendation includes:
+
+* Impact Level
+* Difficulty Level
+* Estimated Savings
+* Reasoning
+
+---
+
+## 💚 Carbon Savings Tracker
+
+CarbonWise tracks the real-world impact of completed actions.
+
+Example:
 
 ```text
-120 kg CO₂ reduction annually
+Public Transport Adoption
+↓
+120 kg CO₂ Saved
+
+Reduced Meat Consumption
+↓
+90 kg CO₂ Saved
+
+Total Annual Savings
+↓
+210 kg CO₂
 ```
 
-Each recommendation includes:
+This transforms sustainability from an abstract concept into measurable progress.
 
-- Impact Level
-- Difficulty Level
-- Estimated Savings
-- Action Plan
+---
+
+## 🔥 Sustainability Habit Streaks
+
+Behavior change is difficult.
+
+CarbonWise encourages consistency through sustainability streaks.
+
+Examples:
+
+* 7 Day Sustainable Transport Streak
+* 14 Day Low-Energy Usage Streak
+* 30 Day Carbon Reduction Streak
+
+The goal is to build long-term sustainable habits.
 
 ---
 
 ## 🔮 Carbon Twin Engine
 
-CarbonWise introduces a Carbon Twin system that simulates future sustainability outcomes.
+CarbonWise introduces a Carbon Twin system.
 
-Users can explore scenarios such as:
+A Carbon Twin is a virtual model of a user's lifestyle that predicts future outcomes.
 
-```text
-What if I reduce car usage?
+Users can compare:
 
-What if I switch to public transport?
+### Current Lifestyle
 
-What if I reduce meat consumption?
+Current emissions and carbon score.
 
-What if I lower electricity usage?
-```
+### Public Transport Scenario
 
-The system forecasts:
+Predicted impact if transportation habits improve.
 
-- Current Emissions
-- Future Emissions
-- Potential Savings
-- Projected Carbon Score
+### Vegetarian Diet Scenario
 
-This helps users make informed decisions before changing real-world habits.
+Predicted impact if dietary habits change.
 
----
+### Combined Sustainability Plan
 
-## 🎯 Goal Tracking System
+Predicted impact when multiple actions are adopted together.
 
-Users can:
+Carbon Twin forecasts include:
 
-- Create Sustainability Goals
-- Track Progress
-- Monitor Milestones
-- Measure Reductions
+* Future Emissions
+* Carbon Savings
+* Sustainability Score
+* Reduction Percentage
 
-Examples:
-
-```text
-Reduce Transportation Emissions by 20%
-
-Reduce Monthly Carbon Footprint by 15%
-
-Reduce Meat Consumption by 30%
-```
+This allows users to evaluate decisions before making real-world changes.
 
 ---
 
@@ -220,265 +268,145 @@ Redis Cache
 
 ## Frontend
 
-- Next.js 15
-- TypeScript
-- Tailwind CSS
-- Shadcn/UI
-- TanStack Query
+* Next.js 15
+* React 19
+* TypeScript
+* Tailwind CSS
+* Shadcn/UI
 
 ## Backend
 
-- NestJS
-- TypeScript
+* NestJS
+* TypeScript
 
 ## Database
 
-- PostgreSQL
-- Prisma ORM
+* PostgreSQL
+* Prisma ORM
 
 ## Caching
 
-- Redis
+* Redis
 
 ## Authentication
 
-- JWT
-(Access Token
-Refresh Token
-Refresh Token Rotation)
-- bcrypt
+* JWT
+* Refresh Tokens
+* Refresh Token Rotation
+* bcrypt
 
 ## Security
 
-- Helmet
-- Rate Limiting
-- Input Validation
-- Secure Environment Variables
+* Helmet
+* Rate Limiting
+* Input Validation
+* Secure Environment Variables
 
 ## Testing
 
-- Jest
-- Supertest
-- Playwright
-- axe-core
+* Jest
+* Supertest
+* Playwright
+* axe-core
 
 ---
 
-# 🔐 Security Features
+# 🔐 Security
 
 CarbonWise follows secure-by-default development practices.
 
 Implemented protections include:
 
-### Authentication
-
-- JWT Access Tokens
-- Refresh Tokens
-- Password Hashing
-
-### Input Validation
-
-- Zod Validation
-- Request Sanitization
-
-### API Security
-
-- Helmet Security Headers
-- Rate Limiting
-- Protected Routes
-
-### Database Security
-
-- Prisma ORM
-- SQL Injection Protection
+* JWT Authentication
+* Refresh Token Rotation
+* Password Hashing with bcrypt
+* Helmet Security Headers
+* Rate Limiting
+* Zod Validation
+* Protected Routes
+* SQL Injection Protection via Prisma
 
 ---
 
-# ⚡ Performance Optimizations
+# 🧪 Testing
 
-To ensure scalability and responsiveness:
+CarbonWise follows a multi-layer testing strategy.
 
-### Database
-
-- Indexed Queries
-- Optimized Schema Design
-- Pagination
-
-### Backend
-
-- Redis Caching
-- Efficient API Responses
-
-### Frontend
-
-- Lazy Loading
-- Code Splitting
-- Optimized Rendering
-
-Performance Targets:
-
-```text
-Dashboard Load Time < 2 Seconds
-
-API Response Time < 500 ms
-
-Carbon Calculation < 100 ms
-```
-
----
-
-# 🧪 Testing Strategy
-
-CarbonWise follows a multi-layer testing approach.
-
-### Unit Testing
+### Unit Tests
 
 Framework:
 
-```text
-Jest
-```
+* Jest
 
-Coverage Target:
-
-```text
-90%+
-```
-
----
-
-### Integration Testing
+### Integration Tests
 
 Framework:
 
-```text
-Supertest
-```
+* Supertest
 
-Coverage Target:
-
-```text
-80%+
-```
-
----
-
-### End-to-End Testing
+### End-to-End Tests
 
 Framework:
 
-```text
-Playwright
-```
+* Playwright
 
-Critical User Flows:
+Covered User Flows:
 
-- Registration
-- Login
-- Carbon Calculator
-- Recommendations
-- Goal Tracking
-- Carbon Twin
-
----
+* Registration
+* Login
+* Dashboard
+* Carbon Calculator
+* Recommendations
+* Goals
+* Carbon Twin
 
 ### Accessibility Testing
 
 Tools:
 
-```text
-Playwright
-axe-core
-```
+* Playwright
+* axe-core
 
 ---
 
 # ♿ Accessibility
 
-CarbonWise is designed to support diverse users.
+CarbonWise is designed for inclusive usage.
 
 Features include:
 
-- WCAG 2.2 AA Compliance
-- Keyboard Navigation
-- Screen Reader Compatibility
-- Semantic HTML
-- ARIA Labels
-- Accessible Forms
-- Color Contrast Compliance
+* WCAG 2.2 AA Compliance
+* Keyboard Navigation
+* ARIA Labels
+* Screen Reader Support
+* Accessible Forms
+* Color Contrast Compliance
 
 ---
 
-# 📂 Project Structure
+# 📊 Emission Data Sources
 
-```text
-carbonwise/
+Carbon calculations are based on recognized sustainability references including:
 
-├── apps/
-│   ├── web/
-│   └── api/
-│
-├── packages/
-│   ├── ui/
-│   ├── validation/
-│   ├── types/
-│   └── utilities/
-│
-├── infrastructure/
-│
-├── tests/
-│
-├── docs/
-│
-└── README.md
-```
+* IPCC Guidelines
+* EPA Emission Factors
+* DEFRA Greenhouse Gas Conversion Factors
+
+These sources provide standardized emission factors for transportation, food, energy, and consumer activities.
 
 ---
 
 # 🎯 Challenge Alignment
 
-The project directly addresses the challenge requirements.
-
-| Requirement | Implementation |
-|------------|----------------|
-| Understand | Carbon Intelligence Engine |
-| Track | Dashboard + Analytics + Goals |
-| Reduce | Recommendations + Carbon Twin |
-| Personalized Insights | Recommendation Engine |
-| Practical Usability | Dashboard + Goal Tracking |
-| Real-World Value | Sustainability Decision Support |
-
----
-
-# 🚀 Future Enhancements
-
-Planned future improvements:
-
-- AI Sustainability Coach
-- Community Challenges
-- Smart Device Integrations
-- Sustainability Achievements
-- Advanced Carbon Forecasting
-- Gamification System
-
----
-
-# 👨💻 Development Principles
-
-The project follows:
-
-- SOLID Principles
-- Clean Architecture
-- Modular Design
-- Security-First Development
-- Test-Driven Development
-- Accessibility-First Design
-
----
-
-# 📜 License
-
-This project is developed as part of a sustainability-focused software engineering challenge.
+| Challenge Requirement | CarbonWise Solution                     |
+| --------------------- | --------------------------------------- |
+| Understand            | Carbon Intelligence Engine              |
+| Track                 | Dashboard, Analytics, Goal Tracking     |
+| Reduce                | Recommendations, Carbon Savings Tracker |
+| Personalized Insights | Recommendation Engine                   |
+| Future Planning       | Carbon Twin Engine                      |
+| Practical Usability   | Sustainability Dashboard                |
+| Real-World Impact     | Measurable Carbon Savings               |
 
 ---
 
@@ -486,4 +414,4 @@ This project is developed as part of a sustainability-focused software engineeri
 
 CarbonWise aims to transform sustainability from a complex environmental concept into simple daily actions that anyone can understand, track, and improve.
 
-By combining carbon intelligence, personalized recommendations, and predictive forecasting, CarbonWise helps users build lasting sustainable habits and make better environmental decisions.
+By combining carbon intelligence, personalized recommendations, carbon savings tracking, and predictive forecasting, CarbonWise helps users build sustainable habits and make better environmental decisions.
